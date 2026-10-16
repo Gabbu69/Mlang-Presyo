@@ -1,0 +1,74 @@
+INFO|LINT|CURLY_BRACES_IN_FLOW_CONTROL_STRUCTURES|G:\\Mlang Presyo\\lib\\data\\portability.dart|27|5|60|Statements in an if should be enclosed in a block.
+INFO|LINT|CURLY_BRACES_IN_FLOW_CONTROL_STRUCTURES|G:\\Mlang Presyo\\lib\\data\\portability.dart|33|5|48|Statements in an if should be enclosed in a block.
+INFO|LINT|CURLY_BRACES_IN_FLOW_CONTROL_STRUCTURES|G:\\Mlang Presyo\\lib\\data\\portability.dart|56|5|56|Statements in an if should be enclosed in a block.
+INFO|LINT|CURLY_BRACES_IN_FLOW_CONTROL_STRUCTURES|G:\\Mlang Presyo\\lib\\data\\portability.dart|58|5|52|Statements in an if should be enclosed in a block.
+INFO|LINT|CURLY_BRACES_IN_FLOW_CONTROL_STRUCTURES|G:\\Mlang Presyo\\lib\\data\\portability.dart|66|7|53|Statements in an if should be enclosed in a block.
+INFO|LINT|CURLY_BRACES_IN_FLOW_CONTROL_STRUCTURES|G:\\Mlang Presyo\\lib\\data\\portability.dart|80|5|53|Statements in an if should be enclosed in a block.
+INFO|LINT|PREFER_INTERPOLATION_TO_COMPOSE_STRINGS|G:\\Mlang Presyo\\lib\\data\\portability.dart|120|5|255|Use interpolation to compose strings and values.
+INFO|LINT|CURLY_BRACES_IN_FLOW_CONTROL_STRUCTURES|G:\\Mlang Presyo\\lib\\data\\repository.dart|156|7|123|Statements in an if should be enclosed in a block.
+INFO|LINT|CURLY_BRACES_IN_FLOW_CONTROL_STRUCTURES|G:\\Mlang Presyo\\lib\\data\\repository.dart|186|7|109|Statements in an if should be enclosed in a block.
+INFO|LINT|CURLY_BRACES_IN_FLOW_CONTROL_STRUCTURES|G:\\Mlang Presyo\\lib\\data\\repository.dart|221|7|92|Statements in an if should be enclosed in a block.
+INFO|LINT|CURLY_BRACES_IN_FLOW_CONTROL_STRUCTURES|G:\\Mlang Presyo\\lib\\data\\repository.dart|225|7|63|Statements in an if should be enclosed in a block.
+INFO|LINT|CURLY_BRACES_IN_FLOW_CONTROL_STRUCTURES|G:\\Mlang Presyo\\lib\\data\\repository.dart|263|11|50|Statements in an if should be enclosed in a block.
+INFO|LINT|CURLY_BRACES_IN_FLOW_CONTROL_STRUCTURES|G:\\Mlang Presyo\\lib\\data\\repository.dart|322|9|55|Statements in an if should be enclosed in a block.
+INFO|LINT|CURLY_BRACES_IN_FLOW_CONTROL_STRUCTURES|G:\\Mlang Presyo\\lib\\data\\repository.dart|326|7|58|Statements in an if should be enclosed in a block.
+INFO|LINT|CURLY_BRACES_IN_FLOW_CONTROL_STRUCTURES|G:\\Mlang Presyo\\lib\\data\\repository.dart|341|7|61|Statements in an if should be enclosed in a block.
+INFO|LINT|CURLY_BRACES_IN_FLOW_CONTROL_STRUCTURES|G:\\Mlang Presyo\\lib\\data\\repository.dart|348|7|37|Statements in an if should be enclosed in a block.
+INFO|LINT|CURLY_BRACES_IN_FLOW_CONTROL_STRUCTURES|G:\\Mlang Presyo\\lib\\data\\repository.dart|362|7|59|Statements in an if should be enclosed in a block.
+INFO|LINT|CURLY_BRACES_IN_FLOW_CONTROL_STRUCTURES|G:\\Mlang Presyo\\lib\\data\\repository.dart|375|7|56|Statements in an if should be enclosed in a block.
+INFO|LINT|CURLY_BRACES_IN_FLOW_CONTROL_STRUCTURES|G:\\Mlang Presyo\\lib\\data\\repository.dart|386|7|130|Statements in an if should be enclosed in a block.
+INFO|LINT|CURLY_BRACES_IN_FLOW_CONTROL_STRUCTURES|G:\\Mlang Presyo\\lib\\data\\repository.dart|406|7|85|Statements in an if should be enclosed in a block.
+INFO|LINT|CURLY_BRACES_IN_FLOW_CONTROL_STRUCTURES|G:\\Mlang Presyo\\lib\\data\\repository.dart|483|7|67|Statements in an if should be enclosed in a block.
+INFO|LINT|CURLY_BRACES_IN_FLOW_CONTROL_STRUCTURES|G:\\Mlang Presyo\\lib\\data\\repository.dart|518|9|54|Statements in an if should be enclosed in a block.
+INFO|LINT|CURLY_BRACES_IN_FLOW_CONTROL_STRUCTURES|G:\\Mlang Presyo\\lib\\data\\validation.dart|173|5|60|Statements in an if should be enclosed in a block.
+INFO|LINT|CURLY_BRACES_IN_FLOW_CONTROL_STRUCTURES|G:\\Mlang Presyo\\lib\\data\\validation.dart|175|5|40|Statements in an if should be enclosed in a block.
+INFO|LINT|CURLY_BRACES_IN_FLOW_CONTROL_STRUCTURES|G:\\Mlang Presyo\\lib\\data\\validation.dart|204|7|62|Statements in an if should be enclosed in a block.
+INFO|LINT|CURLY_BRACES_IN_FLOW_CONTROL_STRUCTURES|G:\\Mlang Presyo\\lib\\data\\validation.dart|236|5|50|Statements in an if should be enclosed in a block.
+INFO|LINT|CURLY_BRACES_IN_FLOW_CONTROL_STRUCTURES|G:\\Mlang Presyo\\lib\\data\\validation.dart|257|7|57|Statements in an if should be enclosed in a block.
+INFO|LINT|CURLY_BRACES_IN_FLOW_CONTROL_STRUCTURES|G:\\Mlang Presyo\\lib\\data\\validation.dart|261|5|69|Statements in an if should be enclosed in a block.
+INFO|LINT|CURLY_BRACES_IN_FLOW_CONTROL_STRUCTURES|G:\\Mlang Presyo\\lib\\data\\validation.dart|264|7|65|Statements in an if should be enclosed in a block.
+INFO|LINT|CURLY_BRACES_IN_FLOW_CONTROL_STRUCTURES|G:\\Mlang Presyo\\lib\\data\\validation.dart|268|5|122|Statements in an if should be enclosed in a block.
+INFO|LINT|CURLY_BRACES_IN_FLOW_CONTROL_STRUCTURES|G:\\Mlang Presyo\\lib\\data\\validation.dart|274|5|123|Statements in an if should be enclosed in a block.
+INFO|LINT|CURLY_BRACES_IN_FLOW_CONTROL_STRUCTURES|G:\\Mlang Presyo\\lib\\data\\validation.dart|296|5|53|Statements in an if should be enclosed in a block.
+INFO|LINT|CURLY_BRACES_IN_FLOW_CONTROL_STRUCTURES|G:\\Mlang Presyo\\lib\\data\\validation.dart|313|11|47|Statements in an if should be enclosed in a block.
+INFO|LINT|CURLY_BRACES_IN_FLOW_CONTROL_STRUCTURES|G:\\Mlang Presyo\\lib\\data\\validation.dart|334|7|50|Statements in an if should be enclosed in a block.
+INFO|LINT|CURLY_BRACES_IN_FLOW_CONTROL_STRUCTURES|G:\\Mlang Presyo\\lib\\data\\validation.dart|342|7|48|Statements in an if should be enclosed in a block.
+INFO|LINT|CURLY_BRACES_IN_FLOW_CONTROL_STRUCTURES|G:\\Mlang Presyo\\lib\\data\\validation.dart|374|7|66|Statements in an if should be enclosed in a block.
+INFO|LINT|CURLY_BRACES_IN_FLOW_CONTROL_STRUCTURES|G:\\Mlang Presyo\\lib\\data\\validation.dart|397|9|61|Statements in an if should be enclosed in a block.
+INFO|LINT|CURLY_BRACES_IN_FLOW_CONTROL_STRUCTURES|G:\\Mlang Presyo\\lib\\data\\validation.dart|402|9|67|Statements in an if should be enclosed in a block.
+INFO|LINT|CURLY_BRACES_IN_FLOW_CONTROL_STRUCTURES|G:\\Mlang Presyo\\lib\\data\\validation.dart|420|9|68|Statements in an if should be enclosed in a block.
+INFO|LINT|CURLY_BRACES_IN_FLOW_CONTROL_STRUCTURES|G:\\Mlang Presyo\\lib\\data\\validation.dart|428|11|54|Statements in an if should be enclosed in a block.
+INFO|LINT|CURLY_BRACES_IN_FLOW_CONTROL_STRUCTURES|G:\\Mlang Presyo\\lib\\data\\validation.dart|436|7|49|Statements in an if should be enclosed in a block.
+INFO|LINT|CURLY_BRACES_IN_FLOW_CONTROL_STRUCTURES|G:\\Mlang Presyo\\lib\\data\\validation.dart|451|7|69|Statements in an if should be enclosed in a block.
+INFO|LINT|CURLY_BRACES_IN_FLOW_CONTROL_STRUCTURES|G:\\Mlang Presyo\\lib\\data\\validation.dart|454|9|71|Statements in an if should be enclosed in a block.
+INFO|LINT|CURLY_BRACES_IN_FLOW_CONTROL_STRUCTURES|G:\\Mlang Presyo\\lib\\data\\validation.dart|461|9|50|Statements in an if should be enclosed in a block.
+INFO|LINT|CURLY_BRACES_IN_FLOW_CONTROL_STRUCTURES|G:\\Mlang Presyo\\lib\\data\\validation.dart|463|9|94|Statements in an if should be enclosed in a block.
+INFO|LINT|CURLY_BRACES_IN_FLOW_CONTROL_STRUCTURES|G:\\Mlang Presyo\\lib\\data\\validation.dart|470|7|54|Statements in an if should be enclosed in a block.
+INFO|LINT|CURLY_BRACES_IN_FLOW_CONTROL_STRUCTURES|G:\\Mlang Presyo\\lib\\features\\catalog.dart|236|7|121|Statements in an if should be enclosed in a block.
+INFO|LINT|CURLY_BRACES_IN_FLOW_CONTROL_STRUCTURES|G:\\Mlang Presyo\\lib\\features\\common.dart|71|7|94|Statements in an if should be enclosed in a block.
+INFO|LINT|CURLY_BRACES_IN_FLOW_CONTROL_STRUCTURES|G:\\Mlang Presyo\\lib\\features\\home.dart|80|19|156|Statements in an if should be enclosed in a block.
+INFO|LINT|CURLY_BRACES_IN_FLOW_CONTROL_STRUCTURES|G:\\Mlang Presyo\\lib\\features\\lists.dart|51|5|233|Statements in an if should be enclosed in a block.
+INFO|LINT|CURLY_BRACES_IN_FLOW_CONTROL_STRUCTURES|G:\\Mlang Presyo\\lib\\features\\lists.dart|201|15|144|Statements in an if should be enclosed in a block.
+INFO|LINT|CURLY_BRACES_IN_FLOW_CONTROL_STRUCTURES|G:\\Mlang Presyo\\lib\\features\\lists.dart|322|7|136|Statements in an if should be enclosed in a block.
+INFO|LINT|CURLY_BRACES_IN_FLOW_CONTROL_STRUCTURES|G:\\Mlang Presyo\\lib\\features\\lists.dart|371|27|242|Statements in an if should be enclosed in a block.
+INFO|LINT|USE_BUILD_CONTEXT_SYNCHRONOUSLY|G:\\Mlang Presyo\\lib\\features\\lists.dart|372|29|7|Don't use 'BuildContext's across async gaps, guarded by an unrelated 'mounted' check.
+INFO|LINT|CURLY_BRACES_IN_FLOW_CONTROL_STRUCTURES|G:\\Mlang Presyo\\lib\\features\\lists.dart|516|35|306|Statements in an if should be enclosed in a block.
+INFO|LINT|CURLY_BRACES_IN_FLOW_CONTROL_STRUCTURES|G:\\Mlang Presyo\\lib\\features\\lists.dart|536|35|261|Statements in an if should be enclosed in a block.
+INFO|LINT|CURLY_BRACES_IN_FLOW_CONTROL_STRUCTURES|G:\\Mlang Presyo\\lib\\features\\lists.dart|601|7|92|Statements in an if should be enclosed in a block.
+INFO|LINT|CURLY_BRACES_IN_FLOW_CONTROL_STRUCTURES|G:\\Mlang Presyo\\lib\\features\\lists.dart|677|7|207|Statements in an if should be enclosed in a block.
+INFO|LINT|CURLY_BRACES_IN_FLOW_CONTROL_STRUCTURES|G:\\Mlang Presyo\\lib\\features\\prices.dart|49|7|128|Statements in an if should be enclosed in a block.
+INFO|LINT|USE_NULL_AWARE_ELEMENTS|G:\\Mlang Presyo\\lib\\features\\prices.dart|459|15|2|Use the null-aware marker '?' rather than a null check via an 'if'.
+INFO|LINT|CURLY_BRACES_IN_FLOW_CONTROL_STRUCTURES|G:\\Mlang Presyo\\lib\\features\\settings.dart|36|7|13|Statements in an if should be enclosed in a block.
+INFO|LINT|CURLY_BRACES_IN_FLOW_CONTROL_STRUCTURES|G:\\Mlang Presyo\\lib\\features\\settings.dart|56|7|156|Statements in an if should be enclosed in a block.
+INFO|LINT|CURLY_BRACES_IN_FLOW_CONTROL_STRUCTURES|G:\\Mlang Presyo\\lib\\features\\settings.dart|98|9|96|Statements in an if should be enclosed in a block.
+INFO|LINT|CURLY_BRACES_IN_FLOW_CONTROL_STRUCTURES|G:\\Mlang Presyo\\lib\\features\\settings.dart|104|11|100|Statements in an if should be enclosed in a block.
+INFO|LINT|CURLY_BRACES_IN_FLOW_CONTROL_STRUCTURES|G:\\Mlang Presyo\\lib\\features\\settings.dart|146|11|7|Statements in an if should be enclosed in a block.
+INFO|LINT|CURLY_BRACES_IN_FLOW_CONTROL_STRUCTURES|G:\\Mlang Presyo\\lib\\features\\settings.dart|157|9|246|Statements in an if should be enclosed in a block.
+INFO|LINT|CURLY_BRACES_IN_FLOW_CONTROL_STRUCTURES|G:\\Mlang Presyo\\lib\\features\\spending.dart|502|29|198|Statements in an if should be enclosed in a block.
+INFO|LINT|USE_NULL_AWARE_ELEMENTS|G:\\Mlang Presyo\\test\\data\\repository_test.dart|53|3|2|Use the null-aware marker '?' rather than a null check via an 'if'.
+INFO|LINT|CURLY_BRACES_IN_FLOW_CONTROL_STRUCTURES|G:\\Mlang Presyo\\test\\data\\repository_test.dart|212|13|43|Statements in an if should be enclosed in a block.
+INFO|LINT|CURLY_BRACES_IN_FLOW_CONTROL_STRUCTURES|G:\\Mlang Presyo\\test\\data\\repository_test.dart|226|13|42|Statements in an if should be enclosed in a block.
+INFO|LINT|CURLY_BRACES_IN_FLOW_CONTROL_STRUCTURES|G:\\Mlang Presyo\\test\\data\\repository_test.dart|466|13|44|Statements in an if should be enclosed in a block.
+INFO|HINT|DEPRECATED_MEMBER_USE|G:\\Mlang Presyo\\test\\data\\repository_test.dart|580|13|7|'dispose' is deprecated and shouldn't be used. Call close() instead.
+INFO|LINT|AVOID_RELATIVE_LIB_IMPORTS|G:\\Mlang Presyo\\test\\domain\\domain_test.dart|3|8|28|Can't use a relative path to import a library in 'lib'.
+INFO|LINT|AVOID_RELATIVE_LIB_IMPORTS|G:\\Mlang Presyo\\test\\domain\\domain_test.dart|4|8|28|Can't use a relative path to import a library in 'lib'.

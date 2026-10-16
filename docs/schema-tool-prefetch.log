@@ -1,0 +1,52 @@
+Resolving dependencies in `G:\DevTemp\presyo-schema-prefetch-20261016`...
+Downloading packages...
++ _fe_analyzer_shared 109.0.0
++ analyzer 14.5.0
++ args 2.7.0
++ async 2.13.1
++ build 4.0.11 (5.0.0 available)
++ build_config 1.4.0
++ charcode 1.4.0
++ checked_yaml 2.0.4
++ cli_util 0.6.0
++ code_assets 2.1.0
++ collection 1.19.1
++ convert 3.1.2
++ crypto 3.0.7
++ dart_style 3.1.14
++ drift 2.35.2
++ drift_dev 2.35.1
++ ffi 2.2.0
++ file 7.0.1
++ glob 2.2.0
++ hooks 2.2.0
++ io 1.1.0
++ json_annotation 4.12.0
++ logging 1.3.0
++ meta 1.19.0
++ native_toolchain_c 0.19.5
++ package_config 3.0.0
++ path 1.9.1
++ platform 3.2.0
++ process 5.0.6
++ pub_semver 2.2.1
++ pubspec_parse 1.6.0
++ recase 4.1.0
++ record_use 1.1.1
++ source_gen 4.3.1
++ source_span 1.10.2
++ sqlite3 3.7.1
++ sqlparser 0.45.0
++ stack_trace 1.12.2
++ stream_channel 2.1.4
++ stream_transform 2.1.2
++ string_scanner 1.4.1
++ term_glyph 1.2.2
++ typed_data 1.4.0
++ watcher 1.2.1
++ web 1.1.1
++ yaml 3.1.4
++ yaml_edit 2.2.4
+Changed 47 dependencies in `G:\DevTemp\presyo-schema-prefetch-20261016`!
+1 package has newer versions incompatible with dependency constraints.
+Try `dart pub outdated` for more information.

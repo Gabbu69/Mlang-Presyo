@@ -1,0 +1,43 @@
+[!] Flutter (Channel [user-branch], 3.47.7, on Microsoft Windows [Version 10.0.26300.9711], locale en-PH) [1,666ms]
+    ! Flutter version 3.47.7 on channel [user-branch] at G:\DevTools\flutter
+      Currently on an unknown channel. Run `flutter channel` to switch to an official channel.
+      If that doesn't fix the issue, try deleting the 'bin/cache/flutter.version.json' file in your Flutter SDK directory and then reinstall Flutter by following instructions at https://flutter.dev/setup.
+    • Upstream repository https://github.com/flutter/flutter.git
+    • Framework revision abaf9c5237 (8 days ago), 2026-10-08 09:51:21 -0700
+    • Engine revision deb287481e
+    • Dart version 3.13.5
+    • DevTools version 2.60.0
+    • Feature flags: enable-web, enable-linux-desktop, enable-macos-desktop, enable-windows-desktop, enable-android, enable-ios, cli-animations, enable-native-assets, enable-record-use, enable-swift-package-manager, omit-legacy-version-file, enable-lldb-debugging, enable-uiscene-migration, enable-riscv64
+    • If those were intentional, you can disregard the above warnings; however it is recommended to use "git" directly to perform update checks and upgrades.
+
+[√] Windows Version (Windows 11 or higher, 26H2, 2009) [10.3s]
+
+[!] Android toolchain - develop for Android devices (Android SDK version 36.0.0) [29.3s]
+    • Android SDK at G:\DevTools\Android\Sdk
+    • Emulator version unknown
+    • Platform android-36, build-tools 36.0.0
+    • ANDROID_HOME = G:\DevTools\Android\Sdk
+    • ANDROID_SDK_ROOT = G:\DevTools\Android\Sdk
+    • Java binary at: G:\DevTools\jdk-17\bin\java
+      This JDK is specified by the JAVA_HOME environment variable.
+      To manually set the JDK path, use: `flutter config --jdk-dir="path/to/jdk"`.
+    • Java version OpenJDK Runtime Environment Temurin-17.0.20.1+1 (build 17.0.20.1+1)
+    ! Some Android licenses not accepted. To resolve this, run: flutter doctor --android-licenses
+
+[√] Chrome - develop for the web [3.4s]
+    • Chrome at C:\Program Files\Google\Chrome\Application\chrome.exe
+
+[!] Visual Studio - develop Windows apps (Visual Studio Build Tools 2026 18.7.3) [3.4s]
+    • Visual Studio at C:\Program Files (x86)\Microsoft Visual Studio\18\BuildTools
+    • Visual Studio Build Tools 2026 version 18.7.11925.98
+    ! Unable to locate a Windows 10 SDK. If building fails, install the Windows 10 SDK in Visual Studio.
+
+[√] Connected device (3 available) [7.8s]
+    • Windows (desktop) • windows • windows-x64    • Microsoft Windows [Version 10.0.26300.9711]
+    • Chrome (web)      • chrome  • web-javascript • Google Chrome 155.0.8059.40
+    • Edge (web)        • edge    • web-javascript • Microsoft Edge 152.0.4191.53
+
+[√] Network resources [5.6s]
+    • All expected network resources are available.
+
+! Doctor found issues in 3 categories.

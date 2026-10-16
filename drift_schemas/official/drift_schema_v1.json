@@ -1,0 +1,1012 @@
+{
+  "_meta": {
+    "description": "This file contains a serialized version of schema entities for drift.",
+    "version": "1.3.0"
+  },
+  "options": {
+    "store_date_time_values_as_text": false
+  },
+  "entities": [
+    {
+      "id": 0,
+      "references": [],
+      "type": "table",
+      "data": {
+        "name": "products",
+        "was_declared_in_moor": true,
+        "columns": [
+          {
+            "name": "id",
+            "getter_name": "id",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "PRIMARY KEY NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              "primary-key"
+            ]
+          },
+          {
+            "name": "name",
+            "getter_name": "name",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL CHECK (length(name) BETWEEN 1 AND 200)",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "brand",
+            "getter_name": "brand",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "variant_grade",
+            "getter_name": "variantGrade",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "category",
+            "getter_name": "category",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "quantity_kind",
+            "getter_name": "quantityKind",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL CHECK (quantity_kind IN ('mass', 'volume', 'count'))",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "archived",
+            "getter_name": "archived",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL CHECK (archived IN (0, 1))",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "created_at_utc",
+            "getter_name": "createdAtUtc",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "updated_at_utc",
+            "getter_name": "updatedAtUtc",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          }
+        ],
+        "is_virtual": false,
+        "without_rowid": false,
+        "constraints": []
+      }
+    },
+    {
+      "id": 1,
+      "references": [],
+      "type": "table",
+      "data": {
+        "name": "stores",
+        "was_declared_in_moor": true,
+        "columns": [
+          {
+            "name": "id",
+            "getter_name": "id",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "PRIMARY KEY NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              "primary-key"
+            ]
+          },
+          {
+            "name": "name",
+            "getter_name": "name",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL CHECK (length(name) BETWEEN 1 AND 200)",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "barangay_text",
+            "getter_name": "barangayText",
+            "moor_type": "string",
+            "nullable": true,
+            "customConstraints": "",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "landmark",
+            "getter_name": "landmark",
+            "moor_type": "string",
+            "nullable": true,
+            "customConstraints": "",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "archived",
+            "getter_name": "archived",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL CHECK (archived IN (0, 1))",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "created_at_utc",
+            "getter_name": "createdAtUtc",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "updated_at_utc",
+            "getter_name": "updatedAtUtc",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          }
+        ],
+        "is_virtual": false,
+        "without_rowid": false,
+        "constraints": []
+      }
+    },
+    {
+      "id": 2,
+      "references": [
+        0,
+        1
+      ],
+      "type": "table",
+      "data": {
+        "name": "price_records",
+        "was_declared_in_moor": true,
+        "columns": [
+          {
+            "name": "id",
+            "getter_name": "id",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "PRIMARY KEY NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              "primary-key"
+            ]
+          },
+          {
+            "name": "product_id",
+            "getter_name": "productId",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL REFERENCES products(id)ON DELETE RESTRICT",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              {
+                "foreign_key": {
+                  "to": {
+                    "table": "products",
+                    "column": "id"
+                  },
+                  "initially_deferred": false,
+                  "on_update": null,
+                  "on_delete": "restrict"
+                }
+              }
+            ]
+          },
+          {
+            "name": "store_id",
+            "getter_name": "storeId",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL REFERENCES stores(id)ON DELETE RESTRICT",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              {
+                "foreign_key": {
+                  "to": {
+                    "table": "stores",
+                    "column": "id"
+                  },
+                  "initially_deferred": false,
+                  "on_update": null,
+                  "on_delete": "restrict"
+                }
+              }
+            ]
+          },
+          {
+            "name": "quoted_centavos",
+            "getter_name": "quotedCentavos",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL CHECK (typeof(quoted_centavos) = 'integer' AND quoted_centavos BETWEEN 1 AND 100000000)",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "offered_quantity_base",
+            "getter_name": "offeredQuantityBase",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL CHECK (typeof(offered_quantity_base) = 'integer' AND offered_quantity_base BETWEEN 1 AND 1000000)",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "selling_mode",
+            "getter_name": "sellingMode",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL CHECK (selling_mode IN ('loose', 'packaged'))",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "offer_type",
+            "getter_name": "offerType",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL CHECK (offer_type IN ('regular', 'promotional', 'conditional'))",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "source_type",
+            "getter_name": "sourceType",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL CHECK (source_type IN ('observed', 'purchase', 'seller_quote'))",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "observed_on",
+            "getter_name": "observedOn",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "notes",
+            "getter_name": "notes",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "created_at_utc",
+            "getter_name": "createdAtUtc",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "updated_at_utc",
+            "getter_name": "updatedAtUtc",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          }
+        ],
+        "is_virtual": false,
+        "without_rowid": false,
+        "constraints": []
+      }
+    },
+    {
+      "id": 3,
+      "references": [],
+      "type": "table",
+      "data": {
+        "name": "shopping_lists",
+        "was_declared_in_moor": true,
+        "columns": [
+          {
+            "name": "id",
+            "getter_name": "id",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "PRIMARY KEY NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              "primary-key"
+            ]
+          },
+          {
+            "name": "title",
+            "getter_name": "title",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL CHECK (length(title) BETWEEN 1 AND 200)",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "budget_centavos",
+            "getter_name": "budgetCentavos",
+            "moor_type": "int",
+            "nullable": true,
+            "customConstraints": "CHECK (budget_centavos IS NULL OR(typeof(budget_centavos) = 'integer' AND budget_centavos BETWEEN 0 AND 1000000000))",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "status",
+            "getter_name": "status",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL CHECK (status IN ('active', 'archived'))",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "created_at_utc",
+            "getter_name": "createdAtUtc",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "updated_at_utc",
+            "getter_name": "updatedAtUtc",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          }
+        ],
+        "is_virtual": false,
+        "without_rowid": false,
+        "constraints": []
+      }
+    },
+    {
+      "id": 4,
+      "references": [
+        3,
+        0,
+        2
+      ],
+      "type": "table",
+      "data": {
+        "name": "list_items",
+        "was_declared_in_moor": true,
+        "columns": [
+          {
+            "name": "id",
+            "getter_name": "id",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "PRIMARY KEY NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              "primary-key"
+            ]
+          },
+          {
+            "name": "list_id",
+            "getter_name": "listId",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL REFERENCES shopping_lists(id)ON DELETE RESTRICT",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              {
+                "foreign_key": {
+                  "to": {
+                    "table": "shopping_lists",
+                    "column": "id"
+                  },
+                  "initially_deferred": false,
+                  "on_update": null,
+                  "on_delete": "restrict"
+                }
+              }
+            ]
+          },
+          {
+            "name": "product_id",
+            "getter_name": "productId",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL REFERENCES products(id)ON DELETE RESTRICT",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              {
+                "foreign_key": {
+                  "to": {
+                    "table": "products",
+                    "column": "id"
+                  },
+                  "initially_deferred": false,
+                  "on_update": null,
+                  "on_delete": "restrict"
+                }
+              }
+            ]
+          },
+          {
+            "name": "requested_quantity_base",
+            "getter_name": "requestedQuantityBase",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL CHECK (typeof(requested_quantity_base) = 'integer' AND requested_quantity_base BETWEEN 1 AND 1000000)",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "estimate_mode",
+            "getter_name": "estimateMode",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL CHECK (estimate_mode IN ('none', 'manual', 'price'))",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "estimate_total_centavos",
+            "getter_name": "estimateTotalCentavos",
+            "moor_type": "int",
+            "nullable": true,
+            "customConstraints": "CHECK (estimate_total_centavos IS NULL OR(typeof(estimate_total_centavos) = 'integer' AND estimate_total_centavos BETWEEN 0 AND 100000000000000))",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "source_price_id",
+            "getter_name": "sourcePriceId",
+            "moor_type": "string",
+            "nullable": true,
+            "customConstraints": "REFERENCES price_records(id)ON DELETE SET NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              {
+                "foreign_key": {
+                  "to": {
+                    "table": "price_records",
+                    "column": "id"
+                  },
+                  "initially_deferred": false,
+                  "on_update": null,
+                  "on_delete": "setNull"
+                }
+              }
+            ]
+          },
+          {
+            "name": "estimate_basis_snapshot",
+            "getter_name": "estimateBasisSnapshot",
+            "moor_type": "string",
+            "nullable": true,
+            "customConstraints": "",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "status",
+            "getter_name": "status",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL CHECK (status IN ('needed', 'bought', 'skipped'))",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "display_order",
+            "getter_name": "displayOrder",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL CHECK (typeof(display_order) = 'integer' AND display_order >= 0)",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          }
+        ],
+        "is_virtual": false,
+        "without_rowid": false,
+        "constraints": [
+          "CHECK((estimate_mode = 'none' AND estimate_total_centavos IS NULL AND source_price_id IS NULL AND estimate_basis_snapshot IS NULL)OR(estimate_mode = 'manual' AND estimate_total_centavos IS NOT NULL AND source_price_id IS NULL AND estimate_basis_snapshot IS NULL)OR(estimate_mode = 'price' AND estimate_total_centavos IS NOT NULL AND estimate_basis_snapshot IS NOT NULL))"
+        ]
+      }
+    },
+    {
+      "id": 5,
+      "references": [
+        4,
+        0,
+        1
+      ],
+      "type": "table",
+      "data": {
+        "name": "purchases",
+        "was_declared_in_moor": true,
+        "columns": [
+          {
+            "name": "id",
+            "getter_name": "id",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "PRIMARY KEY NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              "primary-key"
+            ]
+          },
+          {
+            "name": "list_item_id",
+            "getter_name": "listItemId",
+            "moor_type": "string",
+            "nullable": true,
+            "customConstraints": "UNIQUE REFERENCES list_items(id)ON DELETE RESTRICT",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              "unique",
+              {
+                "foreign_key": {
+                  "to": {
+                    "table": "list_items",
+                    "column": "id"
+                  },
+                  "initially_deferred": false,
+                  "on_update": null,
+                  "on_delete": "restrict"
+                }
+              }
+            ]
+          },
+          {
+            "name": "product_id",
+            "getter_name": "productId",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL REFERENCES products(id)ON DELETE RESTRICT",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              {
+                "foreign_key": {
+                  "to": {
+                    "table": "products",
+                    "column": "id"
+                  },
+                  "initially_deferred": false,
+                  "on_update": null,
+                  "on_delete": "restrict"
+                }
+              }
+            ]
+          },
+          {
+            "name": "store_id",
+            "getter_name": "storeId",
+            "moor_type": "string",
+            "nullable": true,
+            "customConstraints": "REFERENCES stores(id)ON DELETE RESTRICT",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              {
+                "foreign_key": {
+                  "to": {
+                    "table": "stores",
+                    "column": "id"
+                  },
+                  "initially_deferred": false,
+                  "on_update": null,
+                  "on_delete": "restrict"
+                }
+              }
+            ]
+          },
+          {
+            "name": "actual_quantity_base",
+            "getter_name": "actualQuantityBase",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL CHECK (typeof(actual_quantity_base) = 'integer' AND actual_quantity_base BETWEEN 1 AND 1000000)",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "actual_total_centavos",
+            "getter_name": "actualTotalCentavos",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL CHECK (typeof(actual_total_centavos) = 'integer' AND actual_total_centavos BETWEEN 0 AND 100000000)",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "purchased_on",
+            "getter_name": "purchasedOn",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "product_snapshot",
+            "getter_name": "productSnapshot",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "store_snapshot",
+            "getter_name": "storeSnapshot",
+            "moor_type": "string",
+            "nullable": true,
+            "customConstraints": "",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "created_at_utc",
+            "getter_name": "createdAtUtc",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "updated_at_utc",
+            "getter_name": "updatedAtUtc",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          }
+        ],
+        "is_virtual": false,
+        "without_rowid": false,
+        "constraints": []
+      }
+    },
+    {
+      "id": 6,
+      "references": [],
+      "type": "table",
+      "data": {
+        "name": "app_settings",
+        "was_declared_in_moor": true,
+        "columns": [
+          {
+            "name": "key",
+            "getter_name": "key",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "PRIMARY KEY NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              "primary-key"
+            ]
+          },
+          {
+            "name": "value",
+            "getter_name": "value",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          }
+        ],
+        "is_virtual": false,
+        "without_rowid": false,
+        "constraints": []
+      }
+    },
+    {
+      "id": 7,
+      "references": [],
+      "type": "table",
+      "data": {
+        "name": "monthly_budgets",
+        "was_declared_in_moor": true,
+        "columns": [
+          {
+            "name": "month",
+            "getter_name": "month",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "PRIMARY KEY NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              "primary-key"
+            ]
+          },
+          {
+            "name": "budget_centavos",
+            "getter_name": "budgetCentavos",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL CHECK (typeof(budget_centavos) = 'integer' AND budget_centavos BETWEEN 0 AND 1000000000)",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          }
+        ],
+        "is_virtual": false,
+        "without_rowid": false,
+        "constraints": []
+      }
+    },
+    {
+      "id": 8,
+      "references": [
+        2
+      ],
+      "type": "index",
+      "data": {
+        "on": 2,
+        "name": "prices_lookup",
+        "sql": "CREATE INDEX prices_lookup ON price_records(product_id, store_id, observed_on);",
+        "unique": false,
+        "columns": []
+      }
+    },
+    {
+      "id": 9,
+      "references": [
+        4
+      ],
+      "type": "index",
+      "data": {
+        "on": 4,
+        "name": "list_items_list",
+        "sql": "CREATE INDEX list_items_list ON list_items(list_id, display_order);",
+        "unique": false,
+        "columns": []
+      }
+    },
+    {
+      "id": 10,
+      "references": [
+        5
+      ],
+      "type": "index",
+      "data": {
+        "on": 5,
+        "name": "purchases_date",
+        "sql": "CREATE INDEX purchases_date ON purchases(purchased_on);",
+        "unique": false,
+        "columns": []
+      }
+    },
+    {
+      "id": 11,
+      "references": [
+        0,
+        2,
+        4,
+        5
+      ],
+      "type": "trigger",
+      "data": {
+        "on": 0,
+        "references_in_body": [
+          0,
+          2,
+          4,
+          5
+        ],
+        "name": "preserve_quantity_kind",
+        "sql": "CREATE TRIGGER preserve_quantity_kind BEFORE UPDATE OF quantity_kind ON products\n    WHEN NEW.quantity_kind != OLD.quantity_kind AND\n      (EXISTS(SELECT 1 FROM price_records WHERE product_id=OLD.id)\n        OR EXISTS(SELECT 1 FROM list_items WHERE product_id=OLD.id)\n        OR EXISTS(SELECT 1 FROM purchases WHERE product_id=OLD.id))\n    BEGIN SELECT RAISE(ABORT, 'Referenced quantity kind cannot change'); END;"
+      }
+    }
+  ],
+  "fixed_sql": [
+    {
+      "name": "products",
+      "sql": [
+        {
+          "dialect": "sqlite",
+          "sql": "CREATE TABLE IF NOT EXISTS \"products\" (\"id\" TEXT PRIMARY KEY NOT NULL, \"name\" TEXT NOT NULL CHECK (length(name) BETWEEN 1 AND 200), \"brand\" TEXT NOT NULL, \"variant_grade\" TEXT NOT NULL, \"category\" TEXT NOT NULL, \"quantity_kind\" TEXT NOT NULL CHECK (quantity_kind IN ('mass', 'volume', 'count')), \"archived\" INTEGER NOT NULL CHECK (archived IN (0, 1)), \"created_at_utc\" TEXT NOT NULL, \"updated_at_utc\" TEXT NOT NULL);"
+        }
+      ]
+    },
+    {
+      "name": "stores",
+      "sql": [
+        {
+          "dialect": "sqlite",
+          "sql": "CREATE TABLE IF NOT EXISTS \"stores\" (\"id\" TEXT PRIMARY KEY NOT NULL, \"name\" TEXT NOT NULL CHECK (length(name) BETWEEN 1 AND 200), \"barangay_text\" TEXT, \"landmark\" TEXT, \"archived\" INTEGER NOT NULL CHECK (archived IN (0, 1)), \"created_at_utc\" TEXT NOT NULL, \"updated_at_utc\" TEXT NOT NULL);"
+        }
+      ]
+    },
+    {
+      "name": "price_records",
+      "sql": [
+        {
+          "dialect": "sqlite",
+          "sql": "CREATE TABLE IF NOT EXISTS \"price_records\" (\"id\" TEXT PRIMARY KEY NOT NULL, \"product_id\" TEXT NOT NULL REFERENCES products(id)ON DELETE RESTRICT, \"store_id\" TEXT NOT NULL REFERENCES stores(id)ON DELETE RESTRICT, \"quoted_centavos\" INTEGER NOT NULL CHECK (typeof(quoted_centavos) = 'integer' AND quoted_centavos BETWEEN 1 AND 100000000), \"offered_quantity_base\" INTEGER NOT NULL CHECK (typeof(offered_quantity_base) = 'integer' AND offered_quantity_base BETWEEN 1 AND 1000000), \"selling_mode\" TEXT NOT NULL CHECK (selling_mode IN ('loose', 'packaged')), \"offer_type\" TEXT NOT NULL CHECK (offer_type IN ('regular', 'promotional', 'conditional')), \"source_type\" TEXT NOT NULL CHECK (source_type IN ('observed', 'purchase', 'seller_quote')), \"observed_on\" TEXT NOT NULL, \"notes\" TEXT NOT NULL, \"created_at_utc\" TEXT NOT NULL, \"updated_at_utc\" TEXT NOT NULL);"
+        }
+      ]
+    },
+    {
+      "name": "shopping_lists",
+      "sql": [
+        {
+          "dialect": "sqlite",
+          "sql": "CREATE TABLE IF NOT EXISTS \"shopping_lists\" (\"id\" TEXT PRIMARY KEY NOT NULL, \"title\" TEXT NOT NULL CHECK (length(title) BETWEEN 1 AND 200), \"budget_centavos\" INTEGER CHECK (budget_centavos IS NULL OR(typeof(budget_centavos) = 'integer' AND budget_centavos BETWEEN 0 AND 1000000000)), \"status\" TEXT NOT NULL CHECK (status IN ('active', 'archived')), \"created_at_utc\" TEXT NOT NULL, \"updated_at_utc\" TEXT NOT NULL);"
+        }
+      ]
+    },
+    {
+      "name": "list_items",
+      "sql": [
+        {
+          "dialect": "sqlite",
+          "sql": "CREATE TABLE IF NOT EXISTS \"list_items\" (\"id\" TEXT PRIMARY KEY NOT NULL, \"list_id\" TEXT NOT NULL REFERENCES shopping_lists(id)ON DELETE RESTRICT, \"product_id\" TEXT NOT NULL REFERENCES products(id)ON DELETE RESTRICT, \"requested_quantity_base\" INTEGER NOT NULL CHECK (typeof(requested_quantity_base) = 'integer' AND requested_quantity_base BETWEEN 1 AND 1000000), \"estimate_mode\" TEXT NOT NULL CHECK (estimate_mode IN ('none', 'manual', 'price')), \"estimate_total_centavos\" INTEGER CHECK (estimate_total_centavos IS NULL OR(typeof(estimate_total_centavos) = 'integer' AND estimate_total_centavos BETWEEN 0 AND 100000000000000)), \"source_price_id\" TEXT REFERENCES price_records(id)ON DELETE SET NULL, \"estimate_basis_snapshot\" TEXT, \"status\" TEXT NOT NULL CHECK (status IN ('needed', 'bought', 'skipped')), \"display_order\" INTEGER NOT NULL CHECK (typeof(display_order) = 'integer' AND display_order >= 0), CHECK((estimate_mode = 'none' AND estimate_total_centavos IS NULL AND source_price_id IS NULL AND estimate_basis_snapshot IS NULL)OR(estimate_mode = 'manual' AND estimate_total_centavos IS NOT NULL AND source_price_id IS NULL AND estimate_basis_snapshot IS NULL)OR(estimate_mode = 'price' AND estimate_total_centavos IS NOT NULL AND estimate_basis_snapshot IS NOT NULL)));"
+        }
+      ]
+    },
+    {
+      "name": "purchases",
+      "sql": [
+        {
+          "dialect": "sqlite",
+          "sql": "CREATE TABLE IF NOT EXISTS \"purchases\" (\"id\" TEXT PRIMARY KEY NOT NULL, \"list_item_id\" TEXT UNIQUE REFERENCES list_items(id)ON DELETE RESTRICT, \"product_id\" TEXT NOT NULL REFERENCES products(id)ON DELETE RESTRICT, \"store_id\" TEXT REFERENCES stores(id)ON DELETE RESTRICT, \"actual_quantity_base\" INTEGER NOT NULL CHECK (typeof(actual_quantity_base) = 'integer' AND actual_quantity_base BETWEEN 1 AND 1000000), \"actual_total_centavos\" INTEGER NOT NULL CHECK (typeof(actual_total_centavos) = 'integer' AND actual_total_centavos BETWEEN 0 AND 100000000), \"purchased_on\" TEXT NOT NULL, \"product_snapshot\" TEXT NOT NULL, \"store_snapshot\" TEXT, \"created_at_utc\" TEXT NOT NULL, \"updated_at_utc\" TEXT NOT NULL);"
+        }
+      ]
+    },
+    {
+      "name": "app_settings",
+      "sql": [
+        {
+          "dialect": "sqlite",
+          "sql": "CREATE TABLE IF NOT EXISTS \"app_settings\" (\"key\" TEXT PRIMARY KEY NOT NULL, \"value\" TEXT NOT NULL);"
+        }
+      ]
+    },
+    {
+      "name": "monthly_budgets",
+      "sql": [
+        {
+          "dialect": "sqlite",
+          "sql": "CREATE TABLE IF NOT EXISTS \"monthly_budgets\" (\"month\" TEXT PRIMARY KEY NOT NULL, \"budget_centavos\" INTEGER NOT NULL CHECK (typeof(budget_centavos) = 'integer' AND budget_centavos BETWEEN 0 AND 1000000000));"
+        }
+      ]
+    },
+    {
+      "name": "prices_lookup",
+      "sql": [
+        {
+          "dialect": "sqlite",
+          "sql": "CREATE INDEX prices_lookup ON price_records (product_id, store_id, observed_on)"
+        }
+      ]
+    },
+    {
+      "name": "list_items_list",
+      "sql": [
+        {
+          "dialect": "sqlite",
+          "sql": "CREATE INDEX list_items_list ON list_items (list_id, display_order)"
+        }
+      ]
+    },
+    {
+      "name": "purchases_date",
+      "sql": [
+        {
+          "dialect": "sqlite",
+          "sql": "CREATE INDEX purchases_date ON purchases (purchased_on)"
+        }
+      ]
+    },
+    {
+      "name": "preserve_quantity_kind",
+      "sql": [
+        {
+          "dialect": "sqlite",
+          "sql": "CREATE TRIGGER preserve_quantity_kind BEFORE UPDATE OF quantity_kind ON products WHEN NEW.quantity_kind != OLD.quantity_kind AND(EXISTS (SELECT 1 FROM price_records WHERE product_id = OLD.id) OR EXISTS (SELECT 1 FROM list_items WHERE product_id = OLD.id) OR EXISTS (SELECT 1 FROM purchases WHERE product_id = OLD.id))BEGIN SELECT RAISE (ABORT, 'Referenced quantity kind cannot change');END"
+        }
+      ]
+    }
+  ]
+}

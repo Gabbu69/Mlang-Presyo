@@ -1,0 +1,43 @@
+Computing fixes in mlang presyo...
+Applying fixes...
+
+lib\data\portability.dart
+  curly_braces_in_flow_control_structures - 6 fixes
+  prefer_interpolation_to_compose_strings - 1 fix
+
+lib\data\repository.dart
+  curly_braces_in_flow_control_structures - 15 fixes
+
+lib\data\validation.dart
+  curly_braces_in_flow_control_structures - 24 fixes
+
+lib\features\catalog.dart
+  curly_braces_in_flow_control_structures - 1 fix
+
+lib\features\common.dart
+  curly_braces_in_flow_control_structures - 1 fix
+
+lib\features\home.dart
+  curly_braces_in_flow_control_structures - 1 fix
+
+lib\features\lists.dart
+  curly_braces_in_flow_control_structures - 8 fixes
+
+lib\features\prices.dart
+  curly_braces_in_flow_control_structures - 1 fix
+  use_null_aware_elements - 1 fix
+
+lib\features\settings.dart
+  curly_braces_in_flow_control_structures - 6 fixes
+
+lib\features\spending.dart
+  curly_braces_in_flow_control_structures - 1 fix
+
+test\data\repository_test.dart
+  curly_braces_in_flow_control_structures - 3 fixes
+  use_null_aware_elements - 1 fix
+
+test\domain\domain_test.dart
+  avoid_relative_lib_imports - 2 fixes
+
+72 fixes made in 12 files.

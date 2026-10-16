@@ -1,0 +1,28 @@
+name: presyo_mlang
+description: A private offline price notebook and shopping companion for M'lang.
+publish_to: none
+version: 0.1.0+1
+
+environment:
+  sdk: '>=3.10.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_riverpod: ^3.4.3
+  drift: ^2.35.0
+  sqlite3: ^3.5.2
+  path_provider: ^2.1.6
+  uuid: ^4.5.2
+  file_picker: ^13.1.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  integration_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  drift_dev: 2.35.1
+
+flutter:
+  uses-material-design: true

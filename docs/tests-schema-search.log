@@ -1,0 +1,20 @@
+00:00 +0: loading G:/Mlang Presyo/test/migrations/initial_schema_test.dart
+00:00 +0: G:/Mlang Presyo/test/migrations/initial_schema_test.dart: Drift snapshot verifies real initial creation and populated v1 reopen
+00:02 +0 -1: G:/Mlang Presyo/test/migrations/initial_schema_test.dart: Drift snapshot verifies real initial creation and populated v1 reopen [E]
+  Schema does not match
+  app_settings:
+   Internal error: Could not parse CREATE TABLE app_settings (
+      key TEXT PRIMARY KEY NOT NULL, value TEXT NOT NULL
+    )
+  
+  package:drift_dev/src/services/schema/verifier_common.dart 35:5  verify
+  package:drift_dev/src/services/schema/verifier_common.dart 94:5  VerifierImplementation.migrateAndValidate
+  
+00:02 +0 -1: G:/Mlang Presyo/test/migrations/initial_schema_test.dart: Drift verifier detects unexpected tables in the initial schema
+00:05 +1 -1: loading G:/Mlang Presyo/test/performance/search_test.dart
+00:10 +1 -1: G:/Mlang Presyo/test/performance/search_test.dart: HOST ONLY: real Prices search and filters with 2,000 fictional records
+HOST_WIDGET_SEARCH_ONLY records=2000 products=2000 unique_search_and_visible_render_ms=835.123 (Flutter widget-test host; includes test pumping/scrolling; excludes SQLite fixture setup; no Android-device timing claim)
+00:21 +2 -1: Some tests failed.
+
+Failing tests:
+  G:/Mlang Presyo/test/migrations/initial_schema_test.dart: Drift snapshot verifies real initial creation and populated v1 reopen

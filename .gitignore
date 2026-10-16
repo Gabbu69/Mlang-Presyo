@@ -1,0 +1,26 @@
+# Flutter / Dart
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+build/
+coverage/
+*.iml
+.idea/
+.vscode/
+android/.gradle/
+android/local.properties
+android/key.properties
+*.jks
+*.keystore
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+*.db
+# Private data and local artifacts
+exports/
+backups/
+*.apk
+*.aab
+docs/screenshots/
+dist/

@@ -1,0 +1,4 @@
+package: app.presyomlang.personal
+uses-permission: name='android.permission.INTERNET'
+permission: app.presyomlang.personal.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+uses-permission: name='app.presyomlang.personal.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION'

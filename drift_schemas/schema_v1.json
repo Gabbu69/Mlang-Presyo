@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "source": "sqlite_master from AppDatabase.memory()",
+  "entities": [
+    {
+      "type": "index",
+      "name": "list_items_list",
+      "tbl_name": "list_items",
+      "sql": "CREATE INDEX list_items_list ON list_items(list_id, display_order)"
+    },
+    {
+      "type": "index",
+      "name": "prices_lookup",
+      "tbl_name": "price_records",
+      "sql": "CREATE INDEX prices_lookup ON price_records(product_id, store_id, observed_on)"
+    },
+    {
+      "type": "index",
+      "name": "purchases_date",
+      "tbl_name": "purchases",
+      "sql": "CREATE INDEX purchases_date ON purchases(purchased_on)"
+    },
+    {
+      "type": "table",
+      "name": "app_settings",
+      "tbl_name": "app_settings",
+      "sql": "CREATE TABLE app_settings (\n    \"key\" TEXT PRIMARY KEY NOT NULL, \"value\" TEXT NOT NULL\n  )"
+    },
+    {
+      "type": "table",
+      "name": "list_items",
+      "tbl_name": "list_items",
+      "sql": "CREATE TABLE list_items (\n    id TEXT PRIMARY KEY NOT NULL,\n    list_id TEXT NOT NULL REFERENCES shopping_lists(id) ON DELETE RESTRICT,\n    product_id TEXT NOT NULL REFERENCES products(id) ON DELETE RESTRICT,\n    requested_quantity_base INTEGER NOT NULL CHECK(typeof(requested_quantity_base)='integer' AND requested_quantity_base BETWEEN 1 AND 1000000),\n    estimate_mode TEXT NOT NULL CHECK(estimate_mode IN ('none','manual','price')),\n    estimate_total_centavos INTEGER CHECK(estimate_total_centavos IS NULL OR (typeof(estimate_total_centavos)='integer' AND estimate_total_centavos BETWEEN 0 AND 100000000000000)),\n    source_price_id TEXT REFERENCES price_records(id) ON DELETE SET NULL,\n    estimate_basis_snapshot TEXT,\n    status TEXT NOT NULL CHECK(status IN ('needed','bought','skipped')),\n    display_order INTEGER NOT NULL CHECK(typeof(display_order)='integer' AND display_order >= 0),\n    CHECK((estimate_mode = 'none' AND estimate_total_centavos IS NULL AND source_price_id IS NULL AND estimate_basis_snapshot IS NULL)\n      OR (estimate_mode = 'manual' AND estimate_total_centavos IS NOT NULL AND source_price_id IS NULL AND estimate_basis_snapshot IS NULL)\n      OR (estimate_mode = 'price' AND estimate_total_centavos IS NOT NULL AND estimate_basis_snapshot IS NOT NULL))\n  )"
+    },
+    {
+      "type": "table",
+      "name": "monthly_budgets",
+      "tbl_name": "monthly_budgets",
+      "sql": "CREATE TABLE monthly_budgets (\n    month TEXT PRIMARY KEY NOT NULL, budget_centavos INTEGER NOT NULL\n      CHECK(typeof(budget_centavos)='integer' AND budget_centavos BETWEEN 0 AND 1000000000)\n  )"
+    },
+    {
+      "type": "table",
+      "name": "price_records",
+      "tbl_name": "price_records",
+      "sql": "CREATE TABLE price_records (\n    id TEXT PRIMARY KEY NOT NULL,\n    product_id TEXT NOT NULL REFERENCES products(id) ON DELETE RESTRICT,\n    store_id TEXT NOT NULL REFERENCES stores(id) ON DELETE RESTRICT,\n    quoted_centavos INTEGER NOT NULL CHECK(typeof(quoted_centavos)='integer' AND quoted_centavos BETWEEN 1 AND 100000000),\n    offered_quantity_base INTEGER NOT NULL CHECK(typeof(offered_quantity_base)='integer' AND offered_quantity_base BETWEEN 1 AND 1000000),\n    selling_mode TEXT NOT NULL CHECK(selling_mode IN ('loose','packaged')),\n    offer_type TEXT NOT NULL CHECK(offer_type IN ('regular','promotional','conditional')),\n    source_type TEXT NOT NULL CHECK(source_type IN ('observed','purchase','seller_quote')),\n    observed_on TEXT NOT NULL, notes TEXT NOT NULL,\n    created_at_utc TEXT NOT NULL, updated_at_utc TEXT NOT NULL\n  )"
+    },
+    {
+      "type": "table",
+      "name": "products",
+      "tbl_name": "products",
+      "sql": "CREATE TABLE products (\n    id TEXT PRIMARY KEY NOT NULL, name TEXT NOT NULL CHECK(length(name) BETWEEN 1 AND 200),\n    brand TEXT NOT NULL, variant_grade TEXT NOT NULL, category TEXT NOT NULL,\n    quantity_kind TEXT NOT NULL CHECK(quantity_kind IN ('mass','volume','count')),\n    archived INTEGER NOT NULL CHECK(archived IN (0,1)),\n    created_at_utc TEXT NOT NULL, updated_at_utc TEXT NOT NULL\n  )"
+    },
+    {
+      "type": "table",
+      "name": "purchases",
+      "tbl_name": "purchases",
+      "sql": "CREATE TABLE purchases (\n    id TEXT PRIMARY KEY NOT NULL,\n    list_item_id TEXT UNIQUE REFERENCES list_items(id) ON DELETE RESTRICT,\n    product_id TEXT NOT NULL REFERENCES products(id) ON DELETE RESTRICT,\n    store_id TEXT REFERENCES stores(id) ON DELETE RESTRICT,\n    actual_quantity_base INTEGER NOT NULL CHECK(typeof(actual_quantity_base)='integer' AND actual_quantity_base BETWEEN 1 AND 1000000),\n    actual_total_centavos INTEGER NOT NULL CHECK(typeof(actual_total_centavos)='integer' AND actual_total_centavos BETWEEN 0 AND 100000000),\n    purchased_on TEXT NOT NULL, product_snapshot TEXT NOT NULL, store_snapshot TEXT,\n    created_at_utc TEXT NOT NULL, updated_at_utc TEXT NOT NULL\n  )"
+    },
+    {
+      "type": "table",
+      "name": "shopping_lists",
+      "tbl_name": "shopping_lists",
+      "sql": "CREATE TABLE shopping_lists (\n    id TEXT PRIMARY KEY NOT NULL, title TEXT NOT NULL CHECK(length(title) BETWEEN 1 AND 200),\n    budget_centavos INTEGER CHECK(budget_centavos IS NULL OR (typeof(budget_centavos)='integer' AND budget_centavos BETWEEN 0 AND 1000000000)),\n    status TEXT NOT NULL CHECK(status IN ('active','archived')),\n    created_at_utc TEXT NOT NULL, updated_at_utc TEXT NOT NULL\n  )"
+    },
+    {
+      "type": "table",
+      "name": "stores",
+      "tbl_name": "stores",
+      "sql": "CREATE TABLE stores (\n    id TEXT PRIMARY KEY NOT NULL, name TEXT NOT NULL CHECK(length(name) BETWEEN 1 AND 200),\n    barangay_text TEXT, landmark TEXT, archived INTEGER NOT NULL CHECK(archived IN (0,1)),\n    created_at_utc TEXT NOT NULL, updated_at_utc TEXT NOT NULL\n  )"
+    },
+    {
+      "type": "trigger",
+      "name": "preserve_quantity_kind",
+      "tbl_name": "products",
+      "sql": "CREATE TRIGGER preserve_quantity_kind BEFORE UPDATE OF quantity_kind ON products\n    WHEN NEW.quantity_kind != OLD.quantity_kind AND\n      (EXISTS(SELECT 1 FROM price_records WHERE product_id=OLD.id)\n        OR EXISTS(SELECT 1 FROM list_items WHERE product_id=OLD.id)\n        OR EXISTS(SELECT 1 FROM purchases WHERE product_id=OLD.id))\n    BEGIN SELECT RAISE(ABORT, 'Referenced quantity kind cannot change'); END"
+    }
+  ]
+}
