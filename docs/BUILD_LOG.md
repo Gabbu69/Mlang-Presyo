@@ -57,3 +57,10 @@ Further command results and milestone gates will be appended from actual output.
 - Final host-only 2,000-record/product search and visible-result render: 550.73 ms. This includes widget-test pumping/scrolling and excludes SQLite fixture setup; it is not an Android-device benchmark. Named-phone performance remains NOT RUN.
 - Updated the README and phone checklist with actual artifact identity, minimum Android version, direct sideload steps and the three required fictional quote fixtures. Phone install/open, airplane-mode force-stop, Android system picker, TalkBack and manufacturer transfer checks remain NOT RUN by the owner's instruction.
 - The owner subsequently authorized a source push to the verified empty public repository `https://github.com/Gabbu69/Presyo-M-lang.git`, branch `main`, after final checks. Source/tests/docs/lockfile will be published; APKs remain local ignored artifacts. Final Git commit/push evidence will be recorded separately.
+
+## Verified source publication
+
+- Owner-authorized `git push --set-upstream origin main`: PASS to `https://github.com/Gabbu69/Presyo-M-lang.git`.
+- Implementation commit: `11be9ef1b7061542188b2e11feff9fe98b8a31d2`. Both `git ls-remote origin refs/heads/main` and GitHub's commit API returned that exact SHA after the push.
+- Included source, tests, documentation, application lockfile and generated Gradle wrapper scripts/JAR. No APK, database, cache, export or signing keystore was tracked.
+- This following documentation commit records the observed publication. Final remote revision and the source-archive identity are verified separately in the local handoff metadata and final report. Runtime code and the inspected APK are unchanged.

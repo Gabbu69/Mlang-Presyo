@@ -106,9 +106,14 @@ decorative Home introduction is omitted so actions and shopping data appear firs
 
 The owner explicitly authorized pushing source, tests, documentation and the
 application lockfile to [Gabbu69/Presyo-M-lang](https://github.com/Gabbu69/Presyo-M-lang)
-on `main`. Source publication follows the final checks; its commit/push result
-will be recorded from Git evidence. APK distribution, release signing and Play
-Store publication are separate and have not been performed.
+on `main`. The implementation was published successfully at
+[`11be9ef1b7061542188b2e11feff9fe98b8a31d2`](https://github.com/Gabbu69/Presyo-M-lang/commit/11be9ef1b7061542188b2e11feff9fe98b8a31d2).
+`git push --set-upstream origin main` passed; `git ls-remote` and GitHub's commit
+API both returned that exact SHA. A following documentation commit records this
+observed result; the final handoff identifies the final remote revision. The
+Gradle wrapper scripts/JAR are included in source, with the distribution checksum
+pinned. APK distribution, release signing and Play Store publication have not
+been performed. The inspected APK is a local handoff artifact under `dist/`.
 
 ## Explicitly not run
 

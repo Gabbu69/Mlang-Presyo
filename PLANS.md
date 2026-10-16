@@ -15,9 +15,11 @@
 See `docs/VERIFICATION.md`, `docs/BUILD_LOG.md` and command logs for exact evidence.
 Physical-phone testing was explicitly deferred by the owner, who requested the
 APK first. No device/pilot/public-release completion is inferred from host checks.
-The later owner-authorized GitHub source push targets `main` at
-`https://github.com/Gabbu69/Presyo-M-lang.git` after the final checks. The APK stays
-local and ignored; source publication does not complete physical-device acceptance.
+The owner-authorized GitHub source push to `main` at
+`https://github.com/Gabbu69/Presyo-M-lang.git` passed. Implementation commit
+`11be9ef1b7061542188b2e11feff9fe98b8a31d2` was verified through Git and GitHub;
+the following documentation commit records that evidence. The APK stays local
+and ignored; physical-device acceptance remains deferred.
 
 The original milestone instructions below are retained as the acceptance roadmap.
 

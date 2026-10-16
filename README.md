@@ -119,10 +119,8 @@ device-transfer prevention requires separate verification and is not guaranteed.
 - `CODEX_PROMPTS.md` and `SOURCES.md`: original build-kit prompts and primary references.
 
 The approved full-V1 request supersedes the original example prompt to stop at M1.
-The owner explicitly authorized publishing source, tests, documentation and the
-lockfile to [Gabbu69/Presyo-M-lang](https://github.com/Gabbu69/Presyo-M-lang) on
-`main` after final checks. Final source publication is reported from verified Git
-commit/push evidence in the handoff; an authorized or configured remote alone
-does not mean the push has completed.
+Source, tests, documentation and the lockfile are published to
+[Gabbu69/Presyo-M-lang](https://github.com/Gabbu69/Presyo-M-lang) on `main`, as
+authorized by the owner. The observed push evidence is in `docs/VERIFICATION.md`.
 No application backend or paid service is required. Public APK distribution and
 Play Store publication remain separate from this source publication.
