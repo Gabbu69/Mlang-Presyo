@@ -66,7 +66,15 @@ Future<bool> change(
   String? success,
 }) async {
   try {
-    await ref.read(appProvider.notifier).change(action);
+    final refreshed = await ref.read(appProvider.notifier).change(action);
+    if (!refreshed) {
+      // The write committed. Route to the shell's refresh-recovery state so
+      // users retry only the read, rather than replaying a successful action.
+      if (context.mounted) {
+        Navigator.of(context).popUntil((route) => route.isFirst);
+      }
+      return false;
+    }
     if (context.mounted && success != null) {
       ScaffoldMessenger.of(
         context,
@@ -106,24 +114,35 @@ class AppPage extends StatelessWidget {
     required this.title,
     required this.child,
     this.actions,
+    this.busy = false,
   });
   final String title;
   final Widget child;
   final List<Widget>? actions;
+  final bool busy;
   @override
-  Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(
-      toolbarHeight: MediaQuery.textScalerOf(
-        context,
-      ).scale(64).clamp(64.0, 128.0).toDouble(),
-      title: Text(title, maxLines: 2, overflow: TextOverflow.ellipsis),
-      actions: actions,
-    ),
-    body: Column(
-      children: [
-        const DemoBanner(),
-        Expanded(child: child),
-      ],
+  Widget build(BuildContext context) => PopScope(
+    canPop: !busy,
+    child: AbsorbPointer(
+      absorbing: busy,
+      child: ExcludeFocus(
+        excluding: busy,
+        child: Scaffold(
+          appBar: AppBar(
+            toolbarHeight: MediaQuery.textScalerOf(
+              context,
+            ).scale(64).clamp(64.0, 128.0).toDouble(),
+            title: Text(title, maxLines: 2, overflow: TextOverflow.ellipsis),
+            actions: actions,
+          ),
+          body: Column(
+            children: [
+              const DemoBanner(),
+              Expanded(child: child),
+            ],
+          ),
+        ),
+      ),
     ),
   );
 }
@@ -254,7 +273,7 @@ class DateField extends StatelessWidget {
         firstDate: DateTime(1),
         lastDate: manilaToday(),
       );
-      if (picked != null) onChanged(dateText(picked));
+      if (picked != null && context.mounted) onChanged(dateText(picked));
     },
     icon: const Icon(Icons.calendar_today_outlined),
     label: Text('$label: $value'),

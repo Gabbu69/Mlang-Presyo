@@ -40,7 +40,7 @@ void main() {
           throwsA(isA<ValidationException>()),
         );
       }
-      rejects((d) => d['format_version'] = 2);
+      rejects((d) => d['format_version'] = 3);
       expect(encodeBackup(await repository.load(), now: now), before);
     },
   );

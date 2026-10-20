@@ -4,6 +4,14 @@ plugins {
     id("dev.flutter.flutter-gradle-plugin")
 }
 
+// Flutter's installer can uninstall an existing app after a failed update.
+// The test harness must therefore own a package separate from the notebook.
+// Dart exposes Windows environment names in uppercase. Keep the property and
+// ORG_GRADLE_PROJECT_ suffix uppercase so Flutter's child Gradle sees the flag.
+val integrationTarget = providers.gradleProperty("PRESYO_INTEGRATION_TARGET")
+    .map { it == "true" }
+    .getOrElse(false)
+
 android {
     namespace = "app.presyomlang.personal"
     compileSdk = flutter.compileSdkVersion
@@ -16,7 +24,16 @@ android {
 
     defaultConfig {
         // Stable internal personal-pilot ID.
-        applicationId = "app.presyomlang.personal"
+        applicationId = if (integrationTarget) {
+            "app.presyomlang.personal.integration"
+        } else {
+            "app.presyomlang.personal"
+        }
+        manifestPlaceholders["presyoAppLabel"] = if (integrationTarget) {
+            "PresyoGo Tests"
+        } else {
+            "PresyoGo"
+        }
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = flutter.minSdkVersion
@@ -35,6 +52,10 @@ android {
             // Never disguise the development certificate as release signing.
         }
     }
+}
+
+dependencies {
+    testImplementation("junit:junit:4.13.2")
 }
 
 kotlin {

@@ -1,0 +1,18 @@
+Resolving dependencies...
+Downloading packages...
+  build 4.0.11 (5.0.0 available)
+  cross_file 0.3.5+5 (0.4.0 available)
+  material_color_utilities 0.13.0 (0.13.1 available)
+  test_api 0.7.12 (0.7.15 available)
+Got dependencies!
+4 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+00:00 +0: loading G:/Mlang Presyo/test/platform/export_writer_test.dart
+00:00 +0: checked export sends exact UTF-8 bytes and confirms native success
+00:00 +1: native picker cancellation never confirms a backup
+00:00 +2: native provider error is recoverable without exposing private details
+00:00 +3: missing native export bridge never claims a saved backup
+00:00 +4: backup-first canceled export preserves the real notebook and stops restore
+00:05 +5: backup-first failed export preserves the real notebook and stops restore
+00:06 +6: canceling the restore preview never invokes export or replacement
+00:06 +7: All tests passed!

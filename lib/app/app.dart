@@ -33,9 +33,34 @@ class AppShell extends ConsumerStatefulWidget {
 class _AppShellState extends ConsumerState<AppShell> {
   int _tab = 0;
   bool _starting = false;
+  bool _retryingRead = false;
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(appProvider);
+    if (ref.watch(notebookReloadNeededProvider)) {
+      return Scaffold(
+        body: SafeArea(
+          child: PagePadding(
+            children: [
+              const DemoBanner(),
+              const SectionTitle(AppStrings.savedRefreshTitle),
+              const Text(AppStrings.savedRefreshMessage),
+              fieldGap(),
+              FilledButton(
+                onPressed: _retryingRead
+                    ? null
+                    : () async {
+                        setState(() => _retryingRead = true);
+                        await ref.read(appProvider.notifier).refresh();
+                        if (mounted) setState(() => _retryingRead = false);
+                      },
+                child: const Text(English.retry),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
     return state.when(
       loading: () => const Scaffold(
         body: Center(

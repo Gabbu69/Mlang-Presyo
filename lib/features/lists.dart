@@ -5,9 +5,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../app/controller.dart';
 import '../core/domain.dart';
+import '../core/location.dart';
 import '../core/models.dart';
 import 'catalog.dart';
 import 'common.dart';
+import 'location.dart';
+import 'prices.dart';
 import 'spending.dart';
 
 Future<void> chooseListForPrice(
@@ -121,6 +124,7 @@ class _ListFormState extends ConsumerState<ListForm> {
   @override
   Widget build(BuildContext context) => AppPage(
     title: widget.existing == null ? 'Create shopping list' : 'Edit list',
+    busy: _busy,
     child: Column(
       children: [
         Expanded(
@@ -177,12 +181,7 @@ class ListsPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final data = ref.watch(appProvider).requireValue;
-    final lists = [...data.lists]
-      ..sort(
-        (a, b) => (b['updated_at_utc'] as String).compareTo(
-          a['updated_at_utc'] as String,
-        ),
-      );
+    final lists = [...data.lists]..sort(compareUpdatedRows);
     return PagePadding(
       children: [
         Text(
@@ -330,6 +329,7 @@ class _ListDetailState extends ConsumerState<ListDetail> {
     final items = data.listItems(widget.listId);
     return AppPage(
       title: list['title'] as String,
+      busy: _busy,
       actions: [
         IconButton(
           tooltip: English.editListAndBudget,
@@ -633,7 +633,9 @@ class _ItemFormState extends ConsumerState<ItemForm> {
   }
 
   void _quantityChanged(String value) {
-    if (_mode == 'manual') _manual.clear();
+    // A hidden manual draft must also be invalidated: switching estimate modes
+    // must not let an old amount survive a quantity/unit edit unnoticed.
+    _manual.clear();
     setState(() {});
   }
 
@@ -644,12 +646,23 @@ class _ItemFormState extends ConsumerState<ItemForm> {
     }
     final data = ref.read(appProvider).requireValue;
     var older = false;
+    var allAreas = false;
+    var addPrice = false, addStore = false;
+    final area = ShoppingArea.fromSettings(data.settings);
     final row = await showDialog<Row>(
       context: context,
       builder: (c) => StatefulBuilder(
         builder: (c, updateDialog) {
+          final scopedPrices = pricesInArea(
+            data,
+            allAreas ? const ShoppingArea() : area,
+          );
+          final hasAreaRecords = scopedPrices.any(
+            (price) => price['product_id'] == _product,
+          );
+          final emptyArea = !area.isAll && !allAreas && !hasAreaRecords;
           final choices = comparablePrices(
-            data.prices,
+            scopedPrices,
             _product!,
             older: older,
           );
@@ -664,6 +677,14 @@ class _ItemFormState extends ConsumerState<ItemForm> {
                 child: ListView(
                   shrinkWrap: true,
                   children: [
+                    AreaScopeControls(
+                      data: data,
+                      area: area,
+                      allAreas: allAreas,
+                      showChangeArea: false,
+                      onAllAreasChanged: (value) =>
+                          updateDialog(() => allAreas = value),
+                    ),
                     SwitchListTile(
                       contentPadding: EdgeInsets.zero,
                       title: const Text(English.showOlderRecords),
@@ -675,9 +696,37 @@ class _ItemFormState extends ConsumerState<ItemForm> {
                     ),
                     if (choices.isEmpty)
                       Text(
-                        older
+                        emptyArea
+                            ? English.noPricesInArea
+                            : older
                             ? English.noRegularRecordedOffersRecordAPriceFirstOr
                             : English.noRecentComparableRecords,
+                      ),
+                    if (choices.isEmpty && !area.isAll && !allAreas)
+                      const Text(
+                        'Your current area may have no recorded offers. '
+                        'Show all areas to choose another saved offer, or cancel '
+                        'and record a store and price in this area.',
+                      ),
+                    if (emptyArea)
+                      Wrap(
+                        spacing: 8,
+                        children: [
+                          TextButton(
+                            onPressed: () {
+                              addStore = true;
+                              Navigator.pop(c);
+                            },
+                            child: const Text(English.addStore),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              addPrice = true;
+                              Navigator.pop(c);
+                            },
+                            child: const Text(English.addPrice),
+                          ),
+                        ],
                       ),
                     ...choices.map(
                       (p) => ListTile(
@@ -685,8 +734,17 @@ class _ItemFormState extends ConsumerState<ItemForm> {
                         title: Text(
                           '${money(p['quoted_centavos'] as int)} / ${quantityLabel(p['offered_quantity_base'] as int, _kind)}',
                         ),
-                        subtitle: Text(
-                          '${data.store(p['store_id'] as String)!['name']} · ${p['selling_mode']}\n${p['observed_on']} · ${ageLabel(p['observed_on'] as String)}',
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '${data.store(p['store_id'] as String)!['name']} · ${p['selling_mode']}\n${p['observed_on']} · ${ageLabel(p['observed_on'] as String)}',
+                            ),
+                            StoreLocationText(
+                              store: data.store(p['store_id'] as String)!,
+                              area: area,
+                            ),
+                          ],
                         ),
                         onTap: () => Navigator.pop(c, p),
                       ),
@@ -705,6 +763,21 @@ class _ItemFormState extends ConsumerState<ItemForm> {
         },
       ),
     );
+    if (!mounted) return;
+    if (addStore) {
+      await Navigator.push<String>(
+        context,
+        MaterialPageRoute(builder: (_) => const CatalogForm(product: false)),
+      );
+      return;
+    }
+    if (addPrice) {
+      await Navigator.push<void>(
+        context,
+        MaterialPageRoute(builder: (_) => PriceForm(productId: _product)),
+      );
+      return;
+    }
     if (row != null && mounted) {
       setState(() {
         _sourceId = row['id'] as String;
@@ -790,6 +863,7 @@ class _ItemFormState extends ConsumerState<ItemForm> {
     }
     return AppPage(
       title: widget.existing == null ? 'Add list item' : 'Edit item / estimate',
+      busy: _busy,
       child: Column(
         children: [
           Expanded(

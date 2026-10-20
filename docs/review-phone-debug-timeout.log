@@ -1,0 +1,24 @@
+00:00 +0: loading G:/Mlang Presyo/integration_test/app_test.dart
+Running Gradle task 'assembleDebug'...                          
+Warning: SDK processing. This version only understands SDK XML versions up to 3 but an SDK XML file of version 4 was encountered. This can happen if you use versions of Android Studio and the command-line tools that were released at different times.
+Running Gradle task 'assembleDebug'...                            526.1s
+√ Built build\app\outputs\flutter-apk\app-debug.apk
+Installing build\app\outputs\flutter-apk\app-debug.apk...          12.4s
+00:00 +0 -1: loading G:/Mlang Presyo/integration_test/app_test.dart [E]
+  Failed to load "G:/Mlang Presyo/integration_test/app_test.dart": Connecting to the VM Service timed out.
+  package:flutter_tools/src/test/integration_test_device.dart 105:28  IntegrationTestTestDevice.start.<fn>
+  dart:async/zone_root.dart 27:47                                     _rootRun
+  dart:async/zone.dart 810:35                                         _CustomZone.run
+  dart:async/future_impl.dart 1054:34                                 Future.timeout.<fn>
+  ===== asynchronous gap ===========================
+  package:flutter_tools/src/test/integration_test_device.dart 99:9    IntegrationTestTestDevice.start
+  ===== asynchronous gap ===========================
+  package:flutter_tools/src/test/flutter_platform.dart 679:51         FlutterPlatform._startTest.<fn>
+  ===== asynchronous gap ===========================
+  package:flutter_tools/src/base/async_guard.dart 108:24              asyncGuard.<fn>
+  
+00:00 +0 -1: Some tests failed.
+
+Failing tests:
+  G:/Mlang Presyo/integration_test/app_test.dart: loading G:/Mlang Presyo/integration_test/app_test.dart
+

@@ -140,6 +140,16 @@ String dateText(DateTime date) =>
     '${date.month.toString().padLeft(2, '0')}-'
     '${date.day.toString().padLeft(2, '0')}';
 
+/// Newest updated record first, independent of valid ISO fractional precision.
+int compareUpdatedRows(Row a, Row b) {
+  final updated = DateTime.parse(
+    b['updated_at_utc'] as String,
+  ).compareTo(DateTime.parse(a['updated_at_utc'] as String));
+  return updated != 0
+      ? updated
+      : (a['id'] as String).compareTo(b['id'] as String);
+}
+
 DateTime _calendarDate(String value) {
   if (!RegExp(r'^\d{4}-\d{2}-\d{2}$').hasMatch(value)) {
     throw const ValidationException('Enter a date as YYYY-MM-DD.');
@@ -312,6 +322,11 @@ Row priceSnapshot(Row price, Row product, Row store) => {
   'quantity_kind': product['quantity_kind'],
   'store_id': store['id'],
   'store_name': store['name'],
+  'store_area_text': store['area_text'],
+  'store_latitude_e6': store['latitude_e6'],
+  'store_longitude_e6': store['longitude_e6'],
+  'store_accuracy_m': store['accuracy_m'],
+  'store_location_captured_at_utc': store['location_captured_at_utc'],
 };
 
 class ListTotals {

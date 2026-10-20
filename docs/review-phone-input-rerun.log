@@ -1,0 +1,66 @@
+00:00 +0: loading G:/Mlang Presyo/integration_test/app_test.dart
+Running Gradle task 'assembleDebug'...                          
+Warning: SDK processing. This version only understands SDK XML versions up to 3 but an SDK XML file of version 4 was encountered. This can happen if you use versions of Android Studio and the command-line tools that were released at different times.
+Running Gradle task 'assembleDebug'...                            652.9s
+√ Built build\app\outputs\flutter-apk\app-debug.apk
+Installing build\app\outputs\flutter-apk\app-debug.apk...           9.9s
+00:00 +0 -1: loading G:/Mlang Presyo/integration_test/app_test.dart [E]
+  streamListen: (-32602) Invalid params
+  streamListen: invalid 'streamId' parameter: integration_test.VmServiceProxyGoldenFileComparator
+  package:vm_service/src/vm_service.dart 278:34                new _OutstandingRequest
+  package:vm_service/src/vm_service.dart 1960:25               VmService._call.<fn>
+  package:vm_service/src/vm_service.dart 1972:8                VmService._call
+  package:vm_service/src/vm_service.dart 1888:7                VmService.streamListen
+  package:flutter_tools/src/test/flutter_platform.dart 530:29  FlutterPlatform._listenToVmServiceForGoldens
+  
+00:00 +0 -1: offline SQLite journey survives close/reopen and backup round-trip
+WARNING (drift): It looks like you've created the database class AppDatabase multiple times. When these two databases use the same QueryExecutor, race conditions will occur and might corrupt the database. 
+Try to follow the advice at https://drift.simonbinder.eu/faq/#using-the-database or, if you know what you're doing, set driftRuntimeOptions.dontWarnAboutMultipleDatabases = true
+Here is the stacktrace from when the database was opened a second time:
+#0      GeneratedDatabase._handleInstantiated (package:drift/src/runtime/api/db_base.dart:96:30)
+#1      GeneratedDatabase._whenConstructed (package:drift/src/runtime/api/db_base.dart:73:12)
+#2      new GeneratedDatabase (package:drift/src/runtime/api/db_base.dart:64:5)
+#3      new AppDatabase.memory (package:presyo_mlang/data/database.dart:10:26)
+#4      main.<anonymous closure> (file:///G:/Mlang%20Presyo/integration_test/app_test.dart:170:21)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+#7      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+This warning will only appear on debug builds.
+00:05 +1 -1: phone Prices search and filters handle 2,000 isolated fictional records
+PHONE_WIDGET_SEARCH_ONLY records=2000 products=2000 unique_search_and_visible_render_ms=1715.002 (physical Android Flutter integration test; includes test pumping, focus dismissal and scrolling; excludes SQLite fixture setup; no standalone frame-time or production startup benchmark)
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: an object with length of <2000>
+  Actual: [PriceCard:PriceCard]
+   Which: has length of <1>
+
+When the exception was thrown, this was the stack:
+#4      main.<anonymous closure> (file:///G:/Mlang%20Presyo/integration_test/app_test.dart:335:7)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///G:/Mlang%20Presyo/integration_test/app_test.dart line 335
+The test description was:
+  phone Prices search and filters handle 2,000 isolated fictional records
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:16 +1 -2: phone Prices search and filters handle 2,000 isolated fictional records [E]
+  Test failed. See exception logs above.
+  The test description was: phone Prices search and filters handle 2,000 isolated fictional records
+  
+00:16 +1 -2: (tearDownAll)
+00:19 +1 -2: Some tests failed.
+
+Failing tests:
+  G:/Mlang Presyo/integration_test/app_test.dart: loading G:/Mlang Presyo/integration_test/app_test.dart
+  G:/Mlang Presyo/integration_test/app_test.dart: phone Prices search and filters handle 2,000 isolated fictional records
+

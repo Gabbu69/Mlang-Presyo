@@ -4,13 +4,22 @@ import 'package:flutter/material.dart' hide Row;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../app/controller.dart';
+import '../core/location.dart';
 import '../core/models.dart';
+import '../platform/location_service.dart';
 import 'common.dart';
+import 'location.dart';
 
 class CatalogForm extends ConsumerStatefulWidget {
-  const CatalogForm({super.key, required this.product, this.existing});
+  const CatalogForm({
+    super.key,
+    required this.product,
+    this.existing,
+    this.locationService = const LocationService(),
+  });
   final bool product;
   final Row? existing;
+  final LocationService locationService;
   @override
   ConsumerState<CatalogForm> createState() => _CatalogFormState();
 }
@@ -22,9 +31,12 @@ class _CatalogFormState extends ConsumerState<CatalogForm> {
       _variant,
       _category,
       _barangay,
-      _landmark;
+      _landmark,
+      _area;
   late String _kind, _id;
   bool _busy = false;
+  LocationFix? _fix;
+  String? _locationError;
   @override
   void initState() {
     super.initState();
@@ -42,6 +54,22 @@ class _CatalogFormState extends ConsumerState<CatalogForm> {
       text: row['barangay_text'] as String? ?? '',
     );
     _landmark = TextEditingController(text: row['landmark'] as String? ?? '');
+    _area = TextEditingController(text: row['area_text'] as String? ?? '');
+    if (validCoordinatePair(row['latitude_e6'], row['longitude_e6']) &&
+        row['accuracy_m'] is int &&
+        row['location_captured_at_utc'] is String) {
+      final captured = DateTime.tryParse(
+        row['location_captured_at_utc'] as String,
+      );
+      if (captured != null) {
+        _fix = LocationFix(
+          latitudeE6: row['latitude_e6'] as int,
+          longitudeE6: row['longitude_e6'] as int,
+          accuracyM: row['accuracy_m'] as int,
+          capturedAtUtc: captured.toUtc(),
+        );
+      }
+    }
     _kind = row['quantity_kind'] as String? ?? 'mass';
   }
 
@@ -54,10 +82,34 @@ class _CatalogFormState extends ConsumerState<CatalogForm> {
       _category,
       _barangay,
       _landmark,
+      _area,
     ]) {
       field.dispose();
     }
     super.dispose();
+  }
+
+  Future<void> _tagLocation() async {
+    if (_busy) return;
+    setState(() {
+      _busy = true;
+      _locationError = null;
+    });
+    try {
+      final fix = await widget.locationService.currentLocation();
+      if (mounted) setState(() => _fix = fix);
+    } on LocationException catch (error) {
+      if (mounted) setState(() => _locationError = error.message);
+    } catch (_) {
+      if (mounted) {
+        setState(
+          () => _locationError =
+              'Location is unavailable. Enter the city or municipality manually, or retry.',
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
   }
 
   Future<void> _save() async {
@@ -101,6 +153,13 @@ class _CatalogFormState extends ConsumerState<CatalogForm> {
       row.addAll({
         'barangay_text': _barangay.text.trim(),
         'landmark': _landmark.text.trim(),
+        'area_text': _area.text.trim().isEmpty ? null : _area.text.trim(),
+        'latitude_e6': _fix?.latitudeE6,
+        'longitude_e6': _fix?.longitudeE6,
+        'accuracy_m': _fix?.accuracyM,
+        'location_captured_at_utc': _fix?.capturedAtUtc
+            .toUtc()
+            .toIso8601String(),
       });
     }
     final ok = await change(
@@ -118,6 +177,7 @@ class _CatalogFormState extends ConsumerState<CatalogForm> {
 
   @override
   Widget build(BuildContext context) => AppPage(
+    busy: _busy,
     title:
         '${widget.existing == null ? 'Add' : 'Edit'} ${widget.product ? 'product' : 'store'}',
     child: Column(
@@ -201,6 +261,14 @@ class _CatalogFormState extends ConsumerState<CatalogForm> {
                   ),
                 ] else ...[
                   TextFormField(
+                    controller: _area,
+                    maxLength: 200,
+                    decoration: const InputDecoration(
+                      labelText: English.cityMunicipalityOptional,
+                    ),
+                  ),
+                  fieldGap(),
+                  TextFormField(
                     controller: _barangay,
                     maxLength: 160,
                     decoration: const InputDecoration(
@@ -214,6 +282,44 @@ class _CatalogFormState extends ConsumerState<CatalogForm> {
                     decoration: const InputDecoration(
                       labelText: English.landmarkOptional,
                     ),
+                  ),
+                  fieldGap(),
+                  const Text(
+                    'Tag a store only while you are at that store. '
+                    'Changing your shopping area never changes a store location.',
+                  ),
+                  fieldGap(),
+                  OutlinedButton.icon(
+                    onPressed: _busy ? null : _tagLocation,
+                    icon: const Icon(Icons.my_location),
+                    label: Text(
+                      _locationError == null
+                          ? English.tagStoreLocation
+                          : English.retryStoreLocation,
+                    ),
+                  ),
+                  if (_locationError != null) ...[
+                    fieldGap(),
+                    Semantics(liveRegion: true, child: Text(_locationError!)),
+                    TextButton(
+                      onPressed: () => setState(() => _locationError = null),
+                      child: const Text(English.keepStoreLocation),
+                    ),
+                  ],
+                  if (_fix != null) ...[
+                    fieldGap(),
+                    LocationFixText(fix: _fix!),
+                    TextButton(
+                      onPressed: () => setState(() {
+                        _fix = null;
+                        _locationError = null;
+                      }),
+                      child: const Text(English.removeLocationTag),
+                    ),
+                  ],
+                  const Text(
+                    'GPS tags and area labels are optional and saved '
+                    'only when you tap Save. Unencrypted exports can include them.',
                   ),
                 ],
               ],
@@ -251,7 +357,7 @@ class CatalogPage extends ConsumerWidget {
               ),
             ),
             icon: const Icon(Icons.add),
-            label: Text(products ? 'Add product' : 'Add store'),
+            label: Text(products ? 'Add product' : English.addStore),
           ),
           fieldGap(),
           if (rows.isEmpty)
@@ -267,6 +373,7 @@ class CatalogPage extends ConsumerWidget {
                       products ? productName(r) : r['name'] as String,
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
+                    if (!products) StoreLocationText(store: r),
                     Text(
                       r['archived'] == true
                           ? 'Archived · kept in your history'
@@ -363,7 +470,11 @@ class CatalogPicker extends ConsumerWidget {
             ...rows.map(
               (r) => DropdownMenuItem(
                 value: r['id'] as String,
-                child: Text(product ? productName(r) : r['name'] as String),
+                child: Text(
+                  product
+                      ? productName(r)
+                      : '${r['name']}${r['area_text'] == null ? '' : ' · ${r['area_text']}'}',
+                ),
               ),
             ),
           ],
@@ -384,7 +495,7 @@ class CatalogPicker extends ConsumerWidget {
                         builder: (_) => CatalogForm(product: product),
                       ),
                     );
-                    if (id != null) onChanged(id);
+                    if (id != null && context.mounted) onChanged(id);
                   },
             icon: const Icon(Icons.add),
             label: Text('Add ${product ? 'product' : 'store'} here'),

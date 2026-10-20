@@ -1,7 +1,7 @@
 name: presyo_mlang
-description: A private offline price notebook and shopping companion for M'lang.
+description: A private offline price notebook and shopping companion wherever you shop.
 publish_to: none
-version: 0.1.0+1
+version: 0.2.0+3
 
 environment:
   sdk: '>=3.10.0 <4.0.0'

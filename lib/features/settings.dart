@@ -12,8 +12,10 @@ import '../app/strings.dart';
 import '../core/domain.dart';
 import '../core/models.dart';
 import '../data/portability.dart';
+import '../platform/export_writer.dart';
 import 'catalog.dart';
 import 'common.dart';
+import 'location.dart';
 import 'spending.dart';
 
 class SettingsPage extends ConsumerStatefulWidget {
@@ -45,14 +47,12 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
       content = kind == 'prices' ? pricesCsv(data) : purchasesCsv(data);
       extension = 'csv';
     }
-    final destination = await FilePicker.saveFile(
-      dialogTitle: 'Save Presyo M’lang $kind',
-      fileName: 'presyo_mlang_${kind}_${dateText(manilaToday())}.$extension',
-      type: FileType.custom,
-      allowedExtensions: [extension],
+    final saved = await const ExportWriter().save(
+      fileName: 'presyogo_${kind}_${dateText(manilaToday())}.$extension',
+      mimeType: extension == 'json' ? 'application/json' : 'text/csv',
       bytes: Uint8List.fromList(utf8.encode(content)),
     );
-    if (destination == null) return false;
+    if (!saved) return false;
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -89,7 +89,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     setState(() => _busy = true);
     try {
       final file = await FilePicker.pickFile(
-        dialogTitle: 'Choose a Presyo M’lang JSON backup',
+        dialogTitle: 'Choose a PresyoGo JSON backup',
         type: FileType.custom,
         allowedExtensions: ['json'],
       );
@@ -180,14 +180,28 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     final demo = controller.isDemo;
     return AppPage(
       title: English.settings,
+      busy: _busy,
       child: PagePadding(
         children: [
           const Text(
-            English.presyoMLang010,
+            English.appVersion,
             style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700),
           ),
           const Text(English.internalDevelopmentBuildAndroidV1),
           const SectionTitle('Your notebook'),
+          ListTile(
+            contentPadding: EdgeInsets.zero,
+            leading: const Icon(Icons.location_on_outlined),
+            title: const Text(English.shoppingArea),
+            subtitle: const Text(
+              'All areas, a manual area, or nearby saved stores',
+            ),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute<void>(builder: (_) => const ShoppingAreaPage()),
+            ),
+          ),
           ListTile(
             contentPadding: EdgeInsets.zero,
             leading: const Icon(Icons.inventory_2_outlined),

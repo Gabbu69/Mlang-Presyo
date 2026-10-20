@@ -5,9 +5,33 @@ import 'validation.dart';
 
 String encodeBackup(AppData data, {DateTime? now}) {
   validateAppData(data, now: now);
+  final result = _encodeDocument(
+    data,
+    (now ?? DateTime.now()).toUtc().toIso8601String(),
+  );
+  if (utf8.encode(result).length > maxBackupBytes) {
+    invalid('The backup exceeds 10 MiB. Export fewer records.');
+  }
+  return result;
+}
+
+/// Call after logical validation and before mutation. Reserving the longest UTC
+/// timestamp keeps a notebook exportable when a later clock has microseconds.
+void validateBackupCapacity(AppData data) {
+  final result = _encodeDocument(data, '9999-12-31T23:59:59.999999Z');
+  if (utf8.encode(result).length > maxBackupBytes) {
+    invalid(
+      'This change would make your complete backup larger than 10 MiB. '
+      'Shorten text or back up and remove unneeded records, then try again. '
+      'Nothing was saved.',
+    );
+  }
+}
+
+String _encodeDocument(AppData data, String exportedAtUtc) {
   final document = <String, dynamic>{
-    'format_version': 1,
-    'exported_at_utc': (now ?? DateTime.now()).toUtc().toIso8601String(),
+    'format_version': 2,
+    'exported_at_utc': exportedAtUtc,
     'currency': 'PHP',
     'timezone': 'Asia/Manila',
     'products': data.products,
@@ -22,11 +46,7 @@ String encodeBackup(AppData data, {DateTime? now}) {
         {'month': entry.key, 'budget_centavos': entry.value},
     ],
   };
-  final result = const JsonEncoder.withIndent('  ').convert(document);
-  if (utf8.encode(result).length > maxBackupBytes) {
-    invalid('The backup exceeds 10 MiB. Export fewer records.');
-  }
-  return result;
+  return const JsonEncoder.withIndent('  ').convert(document);
 }
 
 AppData decodeBackup(String text, {DateTime? now}) {
@@ -37,7 +57,7 @@ AppData decodeBackup(String text, {DateTime? now}) {
   try {
     decoded = jsonDecode(text);
   } on FormatException {
-    invalid('This file is not valid JSON. Select a Presyo M’lang JSON backup.');
+    invalid('This file is not valid JSON. Select a PresyoGo JSON backup.');
   }
   final root = checkedMap(decoded, 'Backup');
   exactFields(root, [
@@ -54,7 +74,8 @@ AppData decodeBackup(String text, {DateTime? now}) {
     'app_settings',
     'monthly_budgets',
   ], 'Backup');
-  if (root['format_version'] is! int || root['format_version'] != 1) {
+  if (root['format_version'] is! int ||
+      !const [1, 2].contains(root['format_version'])) {
     invalid('This backup format version is not supported.');
   }
   if (root['currency'] != 'PHP' || root['timezone'] != 'Asia/Manila') {
@@ -73,7 +94,23 @@ AppData decodeBackup(String text, {DateTime? now}) {
   }
 
   final products = rows('products');
-  final stores = rows('stores');
+  final formatVersion = root['format_version'] as int;
+  final stores = rows('stores').map((row) {
+    if (formatVersion == 1) {
+      exactFields(
+        row,
+        entityFields['stores']!.where(
+          (field) => !storeLocationFields.contains(field),
+        ),
+        'Legacy store',
+      );
+      return <String, dynamic>{
+        ...row,
+        for (final field in storeLocationFields) field: null,
+      };
+    }
+    return row;
+  }).toList();
   final prices = rows('price_records');
   final lists = rows('shopping_lists');
   final items = rows('list_items');
@@ -136,6 +173,11 @@ String pricesCsv(AppData data) {
       'category',
       'quantity_kind',
       'store',
+      'store_area_text',
+      'store_latitude_e6',
+      'store_longitude_e6',
+      'store_accuracy_m',
+      'store_location_captured_at_utc',
       'quoted_centavos_PHP',
       'offered_quantity_base',
       'selling_mode',
@@ -153,6 +195,8 @@ String pricesCsv(AppData data) {
         data.product(price['product_id'] as String)['category'],
         data.product(price['product_id'] as String)['quantity_kind'],
         data.store(price['store_id'] as String)?['name'],
+        for (final field in storeLocationFields)
+          data.store(price['store_id'] as String)?[field],
         price['quoted_centavos'],
         price['offered_quantity_base'],
         price['selling_mode'],
@@ -176,6 +220,11 @@ String purchasesCsv(AppData data) {
       'category_at_purchase',
       'quantity_kind',
       'store_at_purchase',
+      'store_area_at_purchase',
+      'store_latitude_e6_at_purchase',
+      'store_longitude_e6_at_purchase',
+      'store_accuracy_m_at_purchase',
+      'store_location_captured_at_utc_at_purchase',
       'actual_quantity_base',
       'actual_total_centavos_PHP',
       'purchased_on_Asia_Manila',
@@ -190,6 +239,8 @@ String purchasesCsv(AppData data) {
         purchase['product_snapshot']['category'],
         purchase['product_snapshot']['quantity_kind'],
         purchase['store_snapshot']?['name'],
+        for (final field in storeLocationFields)
+          purchase['store_snapshot']?[field],
         purchase['actual_quantity_base'],
         purchase['actual_total_centavos'],
         purchase['purchased_on'],

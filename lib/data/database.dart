@@ -11,7 +11,7 @@ class AppDatabase extends GeneratedDatabase {
   AppDatabase.file(File file) : super(NativeDatabase.createInBackground(file));
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
 
   @override
   Iterable<TableInfo<Table, Object?>> get allTables => const [];
@@ -26,9 +26,18 @@ class AppDatabase extends GeneratedDatabase {
         await customStatement(statement);
       }
     },
-    onUpgrade: (_, from, to) async => throw StateError(
-      'No reviewed migration from schema $from to $to. Records were preserved.',
-    ),
+    onUpgrade: (_, from, to) async {
+      if (from != 1 || to != 2) {
+        throw StateError(
+          'No reviewed migration from schema $from to $to. Records were preserved.',
+        );
+      }
+      await transaction(() async {
+        for (final statement in migrationV1ToV2Statements) {
+          await customStatement(statement);
+        }
+      });
+    },
     beforeOpen: (_) async {
       await customStatement('PRAGMA foreign_keys = ON');
       final result = await customSelect('PRAGMA foreign_keys').getSingle();
@@ -60,7 +69,14 @@ const schemaStatements = <String>[
   '''CREATE TABLE stores (
     id TEXT PRIMARY KEY NOT NULL, name TEXT NOT NULL CHECK(length(name) BETWEEN 1 AND 200),
     barangay_text TEXT, landmark TEXT, archived INTEGER NOT NULL CHECK(archived IN (0,1)),
-    created_at_utc TEXT NOT NULL, updated_at_utc TEXT NOT NULL
+    created_at_utc TEXT NOT NULL, updated_at_utc TEXT NOT NULL,
+    area_text TEXT CHECK(area_text IS NULL OR (typeof(area_text)='text' AND length(area_text) BETWEEN 1 AND 200)),
+    latitude_e6 INTEGER CHECK(latitude_e6 IS NULL OR (typeof(latitude_e6)='integer' AND latitude_e6 BETWEEN -90000000 AND 90000000)),
+    longitude_e6 INTEGER CHECK(longitude_e6 IS NULL OR (typeof(longitude_e6)='integer' AND longitude_e6 BETWEEN -180000000 AND 180000000)),
+    accuracy_m INTEGER CHECK(accuracy_m IS NULL OR (typeof(accuracy_m)='integer' AND accuracy_m BETWEEN 1 AND 100000)),
+    location_captured_at_utc TEXT CHECK(
+      (latitude_e6 IS NULL AND longitude_e6 IS NULL AND accuracy_m IS NULL AND location_captured_at_utc IS NULL)
+      OR (latitude_e6 IS NOT NULL AND longitude_e6 IS NOT NULL AND accuracy_m IS NOT NULL AND typeof(location_captured_at_utc)='text'))
   )''',
   '''CREATE TABLE price_records (
     id TEXT PRIMARY KEY NOT NULL,
@@ -121,4 +137,15 @@ const schemaStatements = <String>[
         OR EXISTS(SELECT 1 FROM list_items WHERE product_id=OLD.id)
         OR EXISTS(SELECT 1 FROM purchases WHERE product_id=OLD.id))
     BEGIN SELECT RAISE(ABORT, 'Referenced quantity kind cannot change'); END''',
+];
+
+/// Additive migration retains row IDs, foreign keys and historical snapshots.
+const migrationV1ToV2Statements = <String>[
+  "ALTER TABLE stores ADD COLUMN area_text TEXT CHECK(area_text IS NULL OR (typeof(area_text)='text' AND length(area_text) BETWEEN 1 AND 200))",
+  "ALTER TABLE stores ADD COLUMN latitude_e6 INTEGER CHECK(latitude_e6 IS NULL OR (typeof(latitude_e6)='integer' AND latitude_e6 BETWEEN -90000000 AND 90000000))",
+  "ALTER TABLE stores ADD COLUMN longitude_e6 INTEGER CHECK(longitude_e6 IS NULL OR (typeof(longitude_e6)='integer' AND longitude_e6 BETWEEN -180000000 AND 180000000))",
+  "ALTER TABLE stores ADD COLUMN accuracy_m INTEGER CHECK(accuracy_m IS NULL OR (typeof(accuracy_m)='integer' AND accuracy_m BETWEEN 1 AND 100000))",
+  '''ALTER TABLE stores ADD COLUMN location_captured_at_utc TEXT CHECK(
+    (latitude_e6 IS NULL AND longitude_e6 IS NULL AND accuracy_m IS NULL AND location_captured_at_utc IS NULL)
+    OR (latitude_e6 IS NOT NULL AND longitude_e6 IS NOT NULL AND accuracy_m IS NOT NULL AND typeof(location_captured_at_utc)='text'))''',
 ];

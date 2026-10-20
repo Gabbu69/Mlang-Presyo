@@ -1,0 +1,48 @@
+00:00 +0: loading G:/Mlang Presyo/integration_test/app_test.dart
+Running Gradle task 'assembleDebug'...                          
+Warning: SDK processing. This version only understands SDK XML versions up to 3 but an SDK XML file of version 4 was encountered. This can happen if you use versions of Android Studio and the command-line tools that were released at different times.
+../../runtime/vm/os_thread.cc: 345: error: Could not start thread DartWorker: 22 (The device does not recognize the command.
+
+)
+version=3.13.5 (stable) (Tue Sep 29 01:00:52 2026 -0700) on "windows_x64"
+pid=8476, thread=3232, isolate_group=main(000002A3049FE360), isolate=(nil)(0000000000000000)
+os=windows, arch=x64, comp=no, sim=no
+isolate_instructions=2a308f90000, vm_instructions=0
+fp=ab706fee00, sp=ab706fedc0, pc=7ff7abb12ce8
+  pc 0x00007ff7abb12ce8 fp 0x000000ab706fee00 Dart_DetectNullSafety+0x3122b8
+-- End of DumpStackTrace
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':app:compileFlutterBuildDebug'.
+> Process 'command 'G:\DevTools\flutter\bin\flutter.bat'' finished with non-zero exit value -1073740791 (NTSTATUS 0xC0000409)
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights from a Build Scan (powered by Develocity).
+> Get more help at https://help.gradle.org.
+
+BUILD FAILED in 5m 49s
+Running Gradle task 'assembleDebug'...                            376.2s
+00:00 +0 -1: loading G:/Mlang Presyo/integration_test/app_test.dart [E]
+  Failed to load "G:/Mlang Presyo/integration_test/app_test.dart": Gradle task assembleDebug failed with exit code 1
+  package:flutter_tools/src/base/common.dart 34:3                    throwToolExit
+  package:flutter_tools/src/android/gradle.dart 653:7                AndroidGradleBuilder.buildGradleApp
+  ===== asynchronous gap ===========================
+  package:flutter_tools/src/android/gradle.dart 246:5                AndroidGradleBuilder.buildApk
+  ===== asynchronous gap ===========================
+  package:flutter_tools/src/android/android_device.dart 571:7        AndroidDevice.startApp
+  ===== asynchronous gap ===========================
+  package:flutter_tools/src/test/integration_test_device.dart 59:39  IntegrationTestTestDevice.start
+  ===== asynchronous gap ===========================
+  package:flutter_tools/src/test/flutter_platform.dart 679:51        FlutterPlatform._startTest.<fn>
+  ===== asynchronous gap ===========================
+  package:flutter_tools/src/base/async_guard.dart 108:24             asyncGuard.<fn>
+  
+00:00 +0 -1: Some tests failed.
+
+Failing tests:
+  G:/Mlang Presyo/integration_test/app_test.dart: loading G:/Mlang Presyo/integration_test/app_test.dart
+

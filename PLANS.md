@@ -1,6 +1,36 @@
 # Implementation roadmap
 
-## Current status — 16 October 2026
+## Current PresyoGo location update — 18 October 2026, 0.2.0+3
+
+The owner approved **PresyoGo** and **Your prices, wherever you shop.**, optional
+foreground GPS and manual area selection for use anywhere in the Philippines.
+This supersedes the initial GPS exclusion and extends the current
+personal app; community, maps and backend services remain future/excluded scope.
+
+| Milestone | Implementation and verification gate |
+|---|---|
+| M7a Location persistence | HOST VERIFIED — schema 2, genuinely populated v1 upgrade/rollback, format 1 import/format 2 backup, store tags and frozen history tests pass. |
+| M7b Location access | IMPLEMENTED / CHANNEL VERIFIED — one-shot tapped capture, approximate/precise validation, 20-second native acquisition and manual recovery; JVM/build in progress, actual phone callbacks NOT RUN. |
+| M7c Multi-place UI | HOST VERIFIED — PresyoGo labels, Home/Settings area controls, explicit store tags, scoped recent/browsing/comparison/history/estimate prices and local All areas recovery; large-text/keyboard tests pass. |
+| M7d Verification and delivery | Schema exports/migration tests, host/platform/native tests, named-phone location/offline checks, new inspected 0.2.0 APK, verified source push. PENDING. |
+
+The stopped 0.1.1 normal build is not the handoff for this update. Existing host
+and phone evidence below remains historical until the new code passes its checks.
+
+## Current review status — 17 October 2026, 0.1.1+2
+
+| Area | Current evidence |
+|---|---|
+| M1–M5 review fixes | IMPLEMENTED / HOST VERIFIED — pending-write form protection, manual-draft invalidation, true timestamp ordering, post-commit read recovery, strict frozen snapshots, portable capacity and retained lazy search input. Final format: 38 files, zero changes; analysis: no issues; all 93 Flutter tests pass. |
+| Native export writer | HOST/JVM VERIFIED — checked document write/flush/close and safe cancellation/error handling; all 7 native JVM tests pass, alongside focused Dart export tests. Actual provider interactions remain pending. |
+| M6 update artifact | PENDING — 0.1.1+2 APK build, metadata/hash/signature/permission inspection and updated handoff copy. Previous 0.1.0 artifact evidence remains historical. |
+| Phone checks | PARTIAL / RERUN PENDING — TECNO KL7, Android 14/API 34, current user 0. First isolated SQLite journey passed; the 2,000-record search run exposed a real lazy-input state bug. Fix and host regression pass; the full corrected phone rerun, personal install/open and manual checks remain pending. |
+| Updated source publication | PENDING final checks and verified commit/push evidence for the owner-authorized `main` repository. |
+
+Schema 1 and backup format 1 remain unchanged. See `docs/V1_REVIEW_2026-10-17.md`
+and `docs/VERIFICATION.md` for triggers, regressions and actual command results.
+
+## Historical delivery status — 16 October 2026, 0.1.0+1
 
 | Milestone | Current evidence |
 |---|---|

@@ -1,5 +1,25 @@
 /// English interface copy. Keep reviewed translations alongside these labels.
 abstract final class English {
+  static const shoppingArea = 'Shopping area';
+  static const changeShoppingArea = 'Change shopping area';
+  static const useMyLocation = 'Use my location';
+  static const refreshLocation = 'Refresh location';
+  static const retryLocation = 'Retry location';
+  static const saveShoppingArea = 'Save shopping area';
+  static const enterAreaManually = 'Enter area manually';
+  static const useAllAreas = 'Use all areas';
+  static const showAllAreas = 'Show all areas';
+  static const noPricesInArea = 'You haven’t recorded prices in this area yet';
+  static const addStore = 'Add store';
+  static const tagExistingStore = 'Tag an existing store';
+  static const cityMunicipalityOptional = 'City or municipality (optional)';
+  static const tagStoreLocation = 'Tag this store with my current location';
+  static const retryStoreLocation = 'Retry store location';
+  static const keepStoreLocation = 'Continue without changing the GPS tag';
+  static const removeLocationTag = 'Remove location tag';
+  static const noHistoryInScope = 'No recorded price history in this scope.';
+  static const areaNotEntered = 'Area not entered';
+  static const noStoreLocationTag = 'No store GPS tag';
   static const yourPrivateMarketNotebook = 'Your private market notebook';
   static const recordPricesPlanPurchases =
       'Remember prices. Plan what you need.';
@@ -95,7 +115,7 @@ abstract final class English {
   static const privateNoteOptional = 'Private note (optional)';
   static const myPriceRecords = 'My price records';
   static const yourOwnDatedObservationsAroundMLang =
-      'Your own dated observations around M’lang.';
+      'Your own dated observations, wherever you shop.';
   static const searchProducts = 'Search products';
   static const allCategories = 'All categories';
   static const store = 'Store';
@@ -117,7 +137,7 @@ abstract final class English {
   static const backUpCurrentFirst = 'Back up current first';
   static const replaceRecords = 'Replace records';
   static const settings = 'Settings';
-  static const presyoMLang010 = 'Presyo M’lang · 0.1.0';
+  static const appVersion = 'PresyoGo · 0.2.0';
   static const internalDevelopmentBuildAndroidV1 =
       'Internal development build · Android V1';
   static const manageProducts = 'Manage products';

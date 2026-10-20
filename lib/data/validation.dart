@@ -8,6 +8,22 @@ const maxBackupRows = 20000;
 const maxMoney = 100000000;
 const maxBudget = 1000000000;
 const maxQuantity = 1000000;
+const storeLocationFields = [
+  'area_text',
+  'latitude_e6',
+  'longitude_e6',
+  'accuracy_m',
+  'location_captured_at_utc',
+];
+const shoppingAreaSettings = [
+  'location_mode',
+  'area_label',
+  'area_latitude_e6',
+  'area_longitude_e6',
+  'area_accuracy_m',
+  'area_captured_at_utc',
+  'area_radius_m',
+];
 
 const entityFields = <String, List<String>>{
   'products': [
@@ -29,6 +45,7 @@ const entityFields = <String, List<String>>{
     'archived',
     'created_at_utc',
     'updated_at_utc',
+    ...storeLocationFields,
   ],
   'price_records': [
     'id',
@@ -172,8 +189,78 @@ void validateSetting(String key, dynamic value) {
   if (value is String) {
     checkedText(value, 'Setting value', empty: true, max: 2000);
   }
-  if (value is int && value.abs() > 9007199254740991) {
+  if (value is int && (value < -9007199254740991 || value > 9007199254740991)) {
     invalid('Setting number is too large.');
+  }
+}
+
+void validateLocationFix(
+  dynamic latitude,
+  dynamic longitude,
+  dynamic accuracy,
+  dynamic capturedAt,
+) {
+  final values = [latitude, longitude, accuracy, capturedAt];
+  if (values.every((value) => value == null)) return;
+  if (values.any((value) => value == null)) {
+    invalid(
+      'A saved location must include latitude, longitude, accuracy and capture time.',
+    );
+  }
+  checkedInt(latitude, 'Latitude', min: -90000000, max: 90000000);
+  checkedInt(longitude, 'Longitude', min: -180000000, max: 180000000);
+  checkedInt(accuracy, 'Location accuracy', min: 1, max: 100000);
+  checkedUtc(capturedAt, 'Location capture time');
+}
+
+void validateStoreLocation(Row row, {String prefix = ''}) {
+  final area = row['${prefix}area_text'];
+  if (area != null) checkedText(area, 'City or municipality');
+  validateLocationFix(
+    row['${prefix}latitude_e6'],
+    row['${prefix}longitude_e6'],
+    row['${prefix}accuracy_m'],
+    row['${prefix}location_captured_at_utc'],
+  );
+}
+
+void validateShoppingArea(Map<String, dynamic> settings) {
+  final present = shoppingAreaSettings.where(settings.containsKey).length;
+  if (present == 0) return; // Legacy notebooks default to all recorded stores.
+  if (present != shoppingAreaSettings.length) {
+    invalid('Shopping area settings are incomplete. Choose the area again.');
+  }
+  checkedEnum(settings['location_mode'], 'Shopping area mode', [
+    'all',
+    'manual',
+    'nearby',
+  ]);
+  final label = settings['area_label'];
+  if (label != null) checkedText(label, 'Shopping area label');
+  final radius = settings['area_radius_m'];
+  if (radius is! int || !const [5000, 10000, 25000].contains(radius)) {
+    invalid('Choose a shopping radius of 5, 10 or 25 km.');
+  }
+  final latitude = settings['area_latitude_e6'];
+  final longitude = settings['area_longitude_e6'];
+  final accuracy = settings['area_accuracy_m'];
+  final captured = settings['area_captured_at_utc'];
+  validateLocationFix(latitude, longitude, accuracy, captured);
+  switch (settings['location_mode']) {
+    case 'all':
+      if (label != null || latitude != null) {
+        invalid(
+          'All recorded stores mode cannot contain an area label or location.',
+        );
+      }
+    case 'manual':
+      if (label == null || latitude != null) {
+        invalid('A manual shopping area requires a label and no GPS location.');
+      }
+    case 'nearby':
+      if (latitude == null) {
+        invalid('Nearby mode requires a complete phone location.');
+      }
   }
 }
 
@@ -199,18 +286,28 @@ void validateProductSnapshot(dynamic value) {
 
 void validateStoreSnapshot(dynamic value) {
   final row = checkedMap(value, 'Store snapshot');
-  exactFields(row, ['name', 'barangay_text', 'landmark'], 'Store snapshot');
+  final includesLocation = storeLocationFields.any(row.containsKey);
+  exactFields(row, [
+    'name',
+    'barangay_text',
+    'landmark',
+    if (includesLocation) ...storeLocationFields,
+  ], 'Store snapshot');
   checkedText(row['name'], 'Snapshot store name');
   for (final key in ['barangay_text', 'landmark']) {
     if (row[key] != null) {
       checkedText(row[key], 'Snapshot $key', empty: true, max: 500);
     }
   }
+  if (includesLocation) validateStoreLocation(row);
 }
 
 void validateEstimateSnapshot(dynamic value, Row product, {DateTime? now}) {
   final row = checkedMap(value, 'Estimate snapshot');
-  const required = [
+  final includesLocation = storeLocationFields.any(
+    (field) => row.containsKey('store_$field'),
+  );
+  exactFields(row, [
     'format_version',
     'quoted_centavos',
     'offered_quantity_base',
@@ -218,8 +315,6 @@ void validateEstimateSnapshot(dynamic value, Row product, {DateTime? now}) {
     'observed_on',
     'product_name',
     'store_name',
-  ];
-  const optional = [
     'product_id',
     'quantity_kind',
     'category',
@@ -228,13 +323,8 @@ void validateEstimateSnapshot(dynamic value, Row product, {DateTime? now}) {
     'store_id',
     'offer_type',
     'source_type',
-  ];
-  if (required.any((key) => !row.containsKey(key)) ||
-      row.keys.any(
-        (key) => !required.contains(key) && !optional.contains(key),
-      )) {
-    invalid('Estimate snapshot has missing or unsupported fields.');
-  }
+    if (includesLocation) ...storeLocationFields.map((field) => 'store_$field'),
+  ], 'Estimate snapshot');
   if (row['format_version'] != 1 || row['format_version'] is! int) {
     invalid('Unsupported estimate snapshot version.');
   }
@@ -255,36 +345,28 @@ void validateEstimateSnapshot(dynamic value, Row product, {DateTime? now}) {
   );
   checkedText(row['product_name'], 'Snapshot product name');
   checkedText(row['store_name'], 'Snapshot store name');
-  if (row.containsKey('product_id')) {
-    checkedId(row['product_id'], 'Snapshot product');
-    if (row['product_id'] != product['id']) {
-      invalid('Estimate snapshot belongs to another product.');
-    }
+  checkedId(row['product_id'], 'Snapshot product');
+  if (row['product_id'] != product['id']) {
+    invalid('Estimate snapshot belongs to another product.');
   }
-  if (row.containsKey('quantity_kind') &&
-      row['quantity_kind'] != product['quantity_kind']) {
+  if (row['quantity_kind'] != product['quantity_kind']) {
     invalid('Estimate snapshot quantity kind differs from its product.');
   }
   for (final key in ['category', 'brand', 'variant_grade']) {
-    if (row.containsKey(key)) {
-      checkedText(row[key], 'Snapshot $key', empty: key != 'category');
-    }
+    checkedText(row[key], 'Snapshot $key', empty: key != 'category');
   }
-  if (row.containsKey('store_id')) checkedId(row['store_id'], 'Snapshot store');
-  if (row.containsKey('offer_type')) {
-    checkedEnum(row['offer_type'], 'Snapshot offer type', [
-      'regular',
-      'promotional',
-      'conditional',
-    ]);
-  }
-  if (row.containsKey('source_type')) {
-    checkedEnum(row['source_type'], 'Snapshot source type', [
-      'observed',
-      'purchase',
-      'seller_quote',
-    ]);
-  }
+  checkedId(row['store_id'], 'Snapshot store');
+  checkedEnum(row['offer_type'], 'Snapshot offer type', [
+    'regular',
+    'promotional',
+    'conditional',
+  ]);
+  checkedEnum(row['source_type'], 'Snapshot source type', [
+    'observed',
+    'purchase',
+    'seller_quote',
+  ]);
+  if (includesLocation) validateStoreLocation(row, prefix: 'store_');
 }
 
 /// Validates logical records before SQL or restore. It never mutates the input.
@@ -353,6 +435,7 @@ void validateAppData(AppData data, {DateTime? now}) {
     if (row['archived'] is! bool) {
       invalid('Store archive state must be boolean.');
     }
+    validateStoreLocation(row);
   }
   for (final row in data.prices) {
     ref('products', row['product_id'], 'Price product');
@@ -497,6 +580,7 @@ void validateAppData(AppData data, {DateTime? now}) {
   for (final entry in data.settings.entries) {
     validateSetting(entry.key, entry.value);
   }
+  validateShoppingArea(data.settings);
   for (final entry in data.monthlyBudgets.entries) {
     checkedMonth(entry.key);
     checkedInt(entry.value, 'Monthly budget', max: maxBudget);

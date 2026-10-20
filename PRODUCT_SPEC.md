@@ -1,16 +1,56 @@
-# Presyo M'lang - Product and engineering specification
+# PresyoGo - Product and engineering specification
 
-**Version:** 0.1.0 personal pilot. **Prepared:** 16 October 2026.
+**Version:** 0.2.0+3 personal pilot. **Prepared:** 16 October 2026; updated 18 October 2026 (Asia/Manila).
 **Scope:** Android application; offline first; personal use initially, community contributions later.
-**Status:** offline Android V1 implemented; internal debug APK built and inspected; all 69 host tests, formatting and analysis pass. Physical-phone installation and acceptance remain NOT RUN by owner choice. See `docs/VERIFICATION.md` for the actual evidence and limitations. The requirements below remain the behavior contract; community features remain future scope.
+**Status:** PresyoGo location and rebranding are implemented. Formatting passes for 48 Dart files, analysis reports no issues and all 148 Flutter host tests pass, including populated schema 1-to-2 migration, legacy backup import and location flows. Android JVM/build/artifact checks are in progress. No phone is currently connected, so this update's physical-device acceptance is NOT RUN. See `docs/VERIFICATION.md`; community features remain future scope.
+
+## Owner-authorized PresyoGo and location update — 18 October 2026
+
+The app is named PresyoGo, with the tagline 'Your prices, wherever you shop.'
+It must work wherever the owner shops in the Philippines, including cities and
+municipalities outside M'lang. The owner explicitly selected optional phone GPS
+with a manual area fallback. This supersedes the original exclusion of GPS; maps, route
+planning, backend services and shared prices remain excluded.
+
+- Ask for foreground location only after a location button is tapped. Support
+  approximate or precise grants, denial, disabled providers and timeouts. Never
+  request background location or track continuously.
+- Allow All areas, a named manual area, or a saved phone position with a 5, 10 or
+  25 km nearby radius. Default to All areas so existing unlocated stores remain
+  visible. GPS does not download prices or promise nearby market coverage.
+- Store areas and GPS tags are optional. Only an explicit store-location action
+  tags a store; selecting a shopping area does not automatically tag stores.
+  Display coordinates, reported accuracy and capture time. Area names are user
+  entered; no network geocoding, maps, API keys or online service is added.
+- Apply area scope visibly to price browsing, comparisons and explicit quote
+  selection. Nearby scope excludes stores without coordinates and explains how
+  to show all records. Existing frozen estimates and purchase history remain
+  intact when the current area changes.
+- Keep Philippine pesos and Manila calendar-date rules. Geography calculations
+  may use floating point; money calculations remain exact integers/fractions.
+- Upgrade the actual database from schema 1 to schema 2 without deleting data.
+  Export backup format 2 and accept existing format 1 with safe null location
+  defaults. Preserve historical snapshots and test real migration integrity.
+- Store location data locally. User-initiated, unencrypted exports may contain
+  location tags; disclose that clearly. No location is requested on startup.
+- Show Shopping area on Home and in Settings. Filter Home's recent records,
+  Prices, product comparisons/history and the estimate offer chooser consistently.
+  Offer a screen-local Show all areas override without changing the saved scope.
+- A location fix remains a draft until Save shopping area. Show the saved capture
+  time and accuracy and offer Refresh location. Never infer a city name from GPS.
+- In a new area with no saved prices, explain the empty notebook and offer
+  Add store, Add price and Show all areas. Keep all lists and spending accessible.
+- Preserve the existing application IDs, platform channels and private data files
+  when renaming. The test application is labeled PresyoGo Tests. Saved area
+  shortcuts, favorite stores and backup reminders remain later suggestions.
 
 ## 1. Product promise
 
 Help a shopper answer: What should I buy? What did I pay before? What prices have I recorded elsewhere? How much have I actually spent?
 
-Working tagline: **Your local price notebook and shopping companion.**
+Tagline: **Your prices, wherever you shop.**
 
-The owner is building this for personal use and residents of M'lang, North Cotabato. The design should work for any resident's own records, without claiming comprehensive coverage of the municipality. No real store list, current price feed, Kadiwa schedule, or official partnership is supplied.
+The owner began this project in M'lang, North Cotabato. The app supports personal shopping records in other places as well, without claiming comprehensive local coverage. No real store list, current price feed, Kadiwa schedule, or official partnership is supplied.
 
 ### Success for the first version
 
@@ -26,7 +66,7 @@ The first release is useful even with one user. The app must not depend on a cro
 | Dated price observations | Moderated public price submissions | Seller commissions or advertisements |
 | Like-for-like unit comparisons | Seller-posted records and corrections | AI price forecasts or chatbot |
 | Shopping lists and list budgets | Downloaded community records | Receipt OCR and barcode catalog |
-| Actual grocery spending | Server-side authorization and moderation | GPS, maps, travel optimization |
+| Actual grocery spending and optional foreground GPS/manual area | Server-side authorization and moderation | Maps and travel optimization |
 | Price history as a dated list | Abuse reporting and takedowns | Inventory or availability guarantees |
 | JSON backup/restore and CSV exports | Translation after local review | Scraping Facebook or shop websites |
 
@@ -80,7 +120,7 @@ Marking bought opens actual-purchase confirmation. Undoing a purchase warns that
 
 Default to My Price Records. Search products, filter category or store, and inspect history. The Add Price form has product, store, total price for the stated quantity, quantity and unit, loose/packaged flag, observation date, source, regular/promotional flag, and optional short notes.
 
-Require brand/variant/grade when those distinctions matter. Price source options: Personally observed, My purchase, Seller quote. None imply independent verification. Do not request a photo, GPS permission, or contact list.
+Require brand/variant/grade when those distinctions matter. Price source options: Personally observed, My purchase, Seller quote. None imply independent verification. Do not request photos or contacts. Request optional foreground location only after a separate location button is tapped, never as a prerequisite to recording a price.
 
 Product Detail shows comparable offers with both original quantity/price and normalized unit price, source, observed date, and age label. A 'Use for list' action chooses a specific offer, not a supposed universal cheapest store.
 
@@ -250,7 +290,7 @@ Restore is replace-only in Version 1. Validate file size (initial cap 10 MB), su
 
 ### Privacy and local storage
 
-Collect no names, email addresses, phone numbers, GPS coordinates, or user identifiers in Version 1. Store only user-entered shopping data in the app's private storage. Include no analytics, ads, crash-report uploads, or runtime font fetching.
+Collect no names, email addresses, phone numbers or account identifiers in Version 1. Store user-entered shopping data and explicitly saved optional area/location tags in the app's private storage. Location is requested once per button tap, with approximate or precise access accepted, and never tracked in the background or uploaded. Unencrypted exports may contain location tags. Include no analytics, ads, crash-report uploads, or runtime font fetching.
 
 Android may back up application data unless backup behavior is configured. Review both legacy backup rules and newer data-extraction rules, including device transfers, before making a device-only privacy claim [S7]. Version 1 should exclude the app's shopping databases and preferences from automatic cloud backup, with explicit manual exports as the supported backup mechanism. Verify behavior on the supported Android targets and disclose any unverified device-transfer limitation. Do not promise encryption merely because the app uses SQLite.
 

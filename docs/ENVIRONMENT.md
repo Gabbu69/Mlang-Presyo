@@ -1,6 +1,36 @@
 # Development environment
 
-Observed on 16 October 2026 (Asia/Manila). This record distinguishes installed tools from checks still running.
+## PresyoGo check — 18 October 2026
+
+- Rechecked Flutter **3.47.7** (pinned official tag, revision abaf9c5237), Dart
+  **3.13.5**, DevTools **2.60.0** and the project Temurin **17.0.20.1+1** JDK.
+  Current command evidence: `presyogo-toolchain.log` and the build verification.
+- Tool paths/caches remain on G: through `scripts/env.ps1`. No system-wide
+  tooling or Java changes were made. The existing dependency lockfile is unchanged.
+- `adb devices -l` found no connected device. The earlier TECNO KL7 observations
+  below are historical; new physical location/offline tests are NOT RUN.
+- Host has approximately 3.8 GiB usable RAM. SDK checks and Gradle builds are
+  serialized; existing small Gradle heap/one-worker settings remain in place.
+
+## Historical follow-up — 17 October 2026
+
+The installed Flutter/Dart/Android/JDK versions below remain pinned. The owner
+connected an authorized TECNO KL7 running Android 14 / API 34; its current user is
+0. Physical results are tracked in `PHONE_RESULTS_2026-10-17.md`, superseding the
+historical deferral below. Integration tests use a separate application ID and
+database. The current host suite passes all 93 tests, formatting passes for 38
+files with zero changes, and analysis reports no issues.
+
+After a phone rebuild failed to create a Dart worker at 97% Windows committed
+memory, the project Gradle heap was reduced to 768 MiB, metaspace 384 MiB, code
+cache 96 MiB and two active processors. The retry also limits its process tree to
+two processors. Only verified orphan processes from the failed task were
+stopped. System Java, system PATH, page-file settings and unrelated applications
+were not changed. Current build/device results are recorded separately.
+
+## Historical setup — 16 October 2026
+
+Observed on 16 October 2026 (Asia/Manila). This baseline record distinguishes installed tools from the checks running at that time.
 
 ## Paths and isolation
 

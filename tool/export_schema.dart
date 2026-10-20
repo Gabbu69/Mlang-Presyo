@@ -28,7 +28,9 @@ Future<void> main(List<String> arguments) async {
   try {
     final schema = await database.exportedSchema();
     if (sqliteOutput == null) {
-      final target = File('drift_schemas/schema_v1.json');
+      final target = File(
+        'drift_schemas/schema_v${database.schemaVersion}.json',
+      );
       await target.parent.create(recursive: true);
       await target.writeAsString(
         '${const JsonEncoder.withIndent('  ').convert({'schema_version': database.schemaVersion, 'source': 'sqlite_master from AppDatabase.memory()', 'entities': schema})}\n',

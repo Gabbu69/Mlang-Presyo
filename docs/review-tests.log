@@ -1,0 +1,324 @@
+Resolving dependencies...
+Downloading packages...
+  build 4.0.11 (5.0.0 available)
+  cross_file 0.3.5+5 (0.4.0 available)
+  material_color_utilities 0.13.0 (0.13.1 available)
+  test_api 0.7.12 (0.7.15 available)
+Got dependencies!
+4 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+00:00 +0: loading G:/Mlang Presyo/test/app/change_refresh_test.dart
+00:00 +0: G:/Mlang Presyo/test/app/change_refresh_test.dart: a committed duplicate is not replayed after its refresh fails
+00:02 +1: G:/Mlang Presyo/test/app/change_refresh_test.dart: an uncommitted write failure keeps its previous state and throws
+00:02 +2: G:/Mlang Presyo/test/app/change_refresh_test.dart: saved-refresh recovery retries reads without repeating the action
+00:06 +3: G:/Mlang Presyo/test/app/change_refresh_test.dart: a failed post-commit refresh closes a stale detail route safely
+00:07 +4: G:/Mlang Presyo/test/app/change_refresh_test.dart: demo refresh recovery retains the fictional-data banner
+00:07 +5: loading G:/Mlang Presyo/test/data/backup_capacity_test.dart
+00:11 +5: G:/Mlang Presyo/test/data/backup_capacity_test.dart: valid Unicode notes cannot make a successful write unbackuppable
+00:16 +6: loading G:/Mlang Presyo/test/data/estimate_snapshot_test.dart
+00:20 +6: G:/Mlang Presyo/test/data/estimate_snapshot_test.dart: format 1 requires every field of the exported selected-price basis
+00:21 +7: G:/Mlang Presyo/test/data/estimate_snapshot_test.dart: selected-price basis rejects mismatched identity and quantity kind
+00:21 +8: G:/Mlang Presyo/test/data/estimate_snapshot_test.dart: a deleted source preserves a complete portable frozen basis
+WARNING (drift): It looks like you've created the database class AppDatabase multiple times. When these two databases use the same QueryExecutor, race conditions will occur and might corrupt the database. 
+Try to follow the advice at https://drift.simonbinder.eu/faq/#using-the-database or, if you know what you're doing, set driftRuntimeOptions.dontWarnAboutMultipleDatabases = true
+Here is the stacktrace from when the database was opened a second time:
+#0      GeneratedDatabase._handleInstantiated (package:drift/src/runtime/api/db_base.dart:96:30)
+#1      GeneratedDatabase._whenConstructed (package:drift/src/runtime/api/db_base.dart:73:12)
+#2      new GeneratedDatabase (package:drift/src/runtime/api/db_base.dart:64:5)
+#3      new AppDatabase.memory (package:presyo_mlang/data/database.dart:10:26)
+#4      main.<anonymous closure> (file:///G:/Mlang%20Presyo/test/data/estimate_snapshot_test.dart:82:45)
+<asynchronous suspension>
+#5      Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)
+<asynchronous suspension>
+#6      Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+<asynchronous suspension>
+#7      Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+<asynchronous suspension>
+This warning will only appear on debug builds.
+00:21 +9: loading G:/Mlang Presyo/test/data/portability_test.dart
+00:25 +9: G:/Mlang Presyo/test/data/portability_test.dart: T25 invalid JSON and incompatible envelope reject before mutation
+00:25 +10: G:/Mlang Presyo/test/data/portability_test.dart: T25 duplicate IDs reject
+00:26 +11: G:/Mlang Presyo/test/data/portability_test.dart: T25 invalid enum rejects
+00:26 +12: G:/Mlang Presyo/test/data/portability_test.dart: T25 non-integer and excessive quantities reject
+00:26 +13: G:/Mlang Presyo/test/data/portability_test.dart: T25 missing references reject
+00:26 +14: G:/Mlang Presyo/test/data/portability_test.dart: T25 unknown fields reject
+00:26 +15: G:/Mlang Presyo/test/data/portability_test.dart: T25 invalid and future calendar dates reject
+00:26 +16: G:/Mlang Presyo/test/data/portability_test.dart: T25 inconsistent estimate/purchase states and snapshots reject
+00:26 +17: G:/Mlang Presyo/test/data/portability_test.dart: T25 byte and aggregate-row caps reject
+00:26 +18: G:/Mlang Presyo/test/data/portability_test.dart: T25 snapshot quote and frozen reference mismatch rejects
+00:27 +19: G:/Mlang Presyo/test/data/portability_test.dart: T27 formula cells are inert even after whitespace and controls
+00:27 +20: G:/Mlang Presyo/test/data/portability_test.dart: T27 price and purchase exports use snapshots and integer centavo columns
+00:27 +21: loading G:/Mlang Presyo/test/data/repository_test.dart
+00:30 +21: G:/Mlang Presyo/test/data/repository_test.dart: initial real database is empty, FK enabled and schema is version 1
+00:30 +22: G:/Mlang Presyo/test/data/repository_test.dart: initial schema matches the inspected version 1 export
+00:30 +23: G:/Mlang Presyo/test/data/repository_test.dart: T22 invalid references, invalid enums and DB constraints reject writes
+00:31 +24: G:/Mlang Presyo/test/data/repository_test.dart: T15 concurrent callbacks and retries produce exactly one linked expense
+00:31 +25: G:/Mlang Presyo/test/data/repository_test.dart: T16 failed purchase save/undo rolls back both ledger and status
+00:31 +26: G:/Mlang Presyo/test/data/repository_test.dart: T17 frozen plans and historical snapshots survive catalog and quote edits/deletion
+00:31 +27: G:/Mlang Presyo/test/data/repository_test.dart: T19 manual quantity edits clear estimates, selected price recalculates frozen basis
+00:31 +28: G:/Mlang Presyo/test/data/repository_test.dart: T18/T20 monthly dates, duplicate reset and archive preserve ledger
+00:31 +29: G:/Mlang Presyo/test/data/repository_test.dart: changing an unbought product uses a newly selected offer, never an inherited basis
+00:31 +30: G:/Mlang Presyo/test/data/repository_test.dart: T24 all entities and Unicode round-trip with null and zero budgets
+WARNING (drift): It looks like you've created the database class AppDatabase multiple times. When these two databases use the same QueryExecutor, race conditions will occur and might corrupt the database. 
+Try to follow the advice at https://drift.simonbinder.eu/faq/#using-the-database or, if you know what you're doing, set driftRuntimeOptions.dontWarnAboutMultipleDatabases = true
+Here is the stacktrace from when the database was opened a second time:
+#0      GeneratedDatabase._handleInstantiated (package:drift/src/runtime/api/db_base.dart:96:30)
+#1      GeneratedDatabase._whenConstructed (package:drift/src/runtime/api/db_base.dart:73:12)
+#2      new GeneratedDatabase (package:drift/src/runtime/api/db_base.dart:64:5)
+#3      new AppDatabase.memory (package:presyo_mlang/data/database.dart:10:26)
+#4      main.<anonymous closure> (file:///G:/Mlang%20Presyo/test/data/repository_test.dart:434:47)
+<asynchronous suspension>
+#5      Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)
+<asynchronous suspension>
+#6      Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+<asynchronous suspension>
+#7      Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+<asynchronous suspension>
+This warning will only appear on debug builds.
+00:31 +31: G:/Mlang Presyo/test/data/repository_test.dart: T26 replacement restore errors before commit and halfway preserve every old record
+00:31 +32: G:/Mlang Presyo/test/data/repository_test.dart: T29 demo seed and reset affect only their own isolated database
+WARNING (drift): It looks like you've created the database class AppDatabase multiple times. When these two databases use the same QueryExecutor, race conditions will occur and might corrupt the database. 
+Try to follow the advice at https://drift.simonbinder.eu/faq/#using-the-database or, if you know what you're doing, set driftRuntimeOptions.dontWarnAboutMultipleDatabases = true
+Here is the stacktrace from when the database was opened a second time:
+#0      GeneratedDatabase._handleInstantiated (package:drift/src/runtime/api/db_base.dart:96:30)
+#1      GeneratedDatabase._whenConstructed (package:drift/src/runtime/api/db_base.dart:73:12)
+#2      new GeneratedDatabase (package:drift/src/runtime/api/db_base.dart:64:5)
+#3      new AppDatabase.memory (package:presyo_mlang/data/database.dart:10:26)
+#4      main.<anonymous closure> (file:///G:/Mlang%20Presyo/test/data/repository_test.dart:488:21)
+<asynchronous suspension>
+#5      Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)
+<asynchronous suspension>
+#6      Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+<asynchronous suspension>
+#7      Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+<asynchronous suspension>
+This warning will only appear on debug builds.
+00:32 +33: G:/Mlang Presyo/test/data/repository_test.dart: T21 host SQLite close/reopen retains complete logical records
+WARNING (drift): It looks like you've created the database class AppDatabase multiple times. When these two databases use the same QueryExecutor, race conditions will occur and might corrupt the database. 
+Try to follow the advice at https://drift.simonbinder.eu/faq/#using-the-database or, if you know what you're doing, set driftRuntimeOptions.dontWarnAboutMultipleDatabases = true
+Here is the stacktrace from when the database was opened a second time:
+#0      GeneratedDatabase._handleInstantiated (package:drift/src/runtime/api/db_base.dart:96:30)
+#1      GeneratedDatabase._whenConstructed (package:drift/src/runtime/api/db_base.dart:73:12)
+#2      new GeneratedDatabase (package:drift/src/runtime/api/db_base.dart:64:5)
+#3      new AppDatabase.file (package:presyo_mlang/data/database.dart:11:33)
+#4      main.<anonymous closure> (file:///G:/Mlang%20Presyo/test/data/repository_test.dart:531:44)
+<asynchronous suspension>
+#5      Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)
+<asynchronous suspension>
+#6      Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+<asynchronous suspension>
+#7      Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+<asynchronous suspension>
+This warning will only appear on debug builds.
+WARNING (drift): It looks like you've created the database class AppDatabase multiple times. When these two databases use the same QueryExecutor, race conditions will occur and might corrupt the database. 
+Try to follow the advice at https://drift.simonbinder.eu/faq/#using-the-database or, if you know what you're doing, set driftRuntimeOptions.dontWarnAboutMultipleDatabases = true
+Here is the stacktrace from when the database was opened a second time:
+#0      GeneratedDatabase._handleInstantiated (package:drift/src/runtime/api/db_base.dart:96:30)
+#1      GeneratedDatabase._whenConstructed (package:drift/src/runtime/api/db_base.dart:73:12)
+#2      new GeneratedDatabase (package:drift/src/runtime/api/db_base.dart:64:5)
+#3      new AppDatabase.file (package:presyo_mlang/data/database.dart:11:33)
+#4      main.<anonymous closure> (file:///G:/Mlang%20Presyo/test/data/repository_test.dart:536:40)
+<asynchronous suspension>
+#5      Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)
+<asynchronous suspension>
+#6      Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+<asynchronous suspension>
+#7      Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+<asynchronous suspension>
+This warning will only appear on debug builds.
+00:35 +34: G:/Mlang Presyo/test/data/repository_test.dart: unknown future schema does not destructively recreate the database
+WARNING (drift): It looks like you've created the database class AppDatabase multiple times. When these two databases use the same QueryExecutor, race conditions will occur and might corrupt the database. 
+Try to follow the advice at https://drift.simonbinder.eu/faq/#using-the-database or, if you know what you're doing, set driftRuntimeOptions.dontWarnAboutMultipleDatabases = true
+Here is the stacktrace from when the database was opened a second time:
+#0      GeneratedDatabase._handleInstantiated (package:drift/src/runtime/api/db_base.dart:96:30)
+#1      GeneratedDatabase._whenConstructed (package:drift/src/runtime/api/db_base.dart:73:12)
+#2      new GeneratedDatabase (package:drift/src/runtime/api/db_base.dart:64:5)
+#3      new AppDatabase.file (package:presyo_mlang/data/database.dart:11:33)
+#4      main.<anonymous closure> (file:///G:/Mlang%20Presyo/test/data/repository_test.dart:554:44)
+<asynchronous suspension>
+#5      Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)
+<asynchronous suspension>
+#6      Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+<asynchronous suspension>
+#7      Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+<asynchronous suspension>
+This warning will only appear on debug builds.
+WARNING (drift): It looks like you've created the database class AppDatabase multiple times. When these two databases use the same QueryExecutor, race conditions will occur and might corrupt the database. 
+Try to follow the advice at https://drift.simonbinder.eu/faq/#using-the-database or, if you know what you're doing, set driftRuntimeOptions.dontWarnAboutMultipleDatabases = true
+Here is the stacktrace from when the database was opened a second time:
+#0      GeneratedDatabase._handleInstantiated (package:drift/src/runtime/api/db_base.dart:96:30)
+#1      GeneratedDatabase._whenConstructed (package:drift/src/runtime/api/db_base.dart:73:12)
+#2      new GeneratedDatabase (package:drift/src/runtime/api/db_base.dart:64:5)
+#3      new AppDatabase.file (package:presyo_mlang/data/database.dart:11:33)
+#4      main.<anonymous closure> (file:///G:/Mlang%20Presyo/test/data/repository_test.dart:559:40)
+<asynchronous suspension>
+#5      Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)
+<asynchronous suspension>
+#6      Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+<asynchronous suspension>
+#7      Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+<asynchronous suspension>
+This warning will only appear on debug builds.
+00:38 +35: loading G:/Mlang Presyo/test/data/row_limit_test.dart
+00:43 +35: G:/Mlang Presyo/test/data/row_limit_test.dart: settings and monthly budgets preserve the aggregate portable row limit
+00:48 +36: loading G:/Mlang Presyo/test/domain/domain_test.dart
+00:52 +36: G:/Mlang Presyo/test/domain/domain_test.dart: T01–T04 exact money and canonical quantities T01 decimal strings become exact centavos and format with two decimals
+00:52 +37: G:/Mlang Presyo/test/domain/domain_test.dart: T01–T04 exact money and canonical quantities T02 invalid, negative, exponent, and oversized money is rejected
+00:52 +38: G:/Mlang Presyo/test/domain/domain_test.dart: T01–T04 exact money and canonical quantities T03 measured quantity conversion never uses binary decimals
+00:52 +39: G:/Mlang Presyo/test/domain/domain_test.dart: T01–T04 exact money and canonical quantities T02/T03 unsupported, fractional base, zero, and oversized quantities fail
+00:52 +40: G:/Mlang Presyo/test/domain/domain_test.dart: T01–T04 exact money and canonical quantities T04 round only the final positive rational boundary
+00:52 +41: G:/Mlang Presyo/test/domain/domain_test.dart: T05–T12 trustworthy comparison and Manila dates T05 exact normalized values and ordering
+00:52 +42: G:/Mlang Presyo/test/domain/domain_test.dart: T05–T12 trustworthy comparison and Manila dates T06 loose and whole-package payable totals remain distinct
+00:52 +43: G:/Mlang Presyo/test/domain/domain_test.dart: T05–T12 trustworthy comparison and Manila dates T07 explicit variant identity excludes other product IDs
+00:52 +44: G:/Mlang Presyo/test/domain/domain_test.dart: T05–T12 trustworthy comparison and Manila dates T08 newest eligible group observation replaces obsolete cheaper quote
+00:52 +45: G:/Mlang Presyo/test/domain/domain_test.dart: T05–T12 trustworthy comparison and Manila dates T08 deterministic same-day timestamp and ID tie-breaking
+00:52 +46: G:/Mlang Presyo/test/domain/domain_test.dart: T05–T12 trustworthy comparison and Manila dates T09 age seven is included, age eight opt-in preserves label
+00:52 +47: G:/Mlang Presyo/test/domain/domain_test.dart: T05–T12 trustworthy comparison and Manila dates T10 stale-only candidate set is empty until explicit opt-in
+00:52 +48: G:/Mlang Presyo/test/domain/domain_test.dart: T05–T12 trustworthy comparison and Manila dates T11 Manila midnight is independent of device timezone
+00:52 +49: G:/Mlang Presyo/test/domain/domain_test.dart: T05–T12 trustworthy comparison and Manila dates T12 promotions/conditional offers excluded and fraction ranking stays exact
+00:52 +50: G:/Mlang Presyo/test/domain/domain_test.dart: T13/T14/T18 ledger-based totals and frozen snapshots T13 complete budget projection separates all amounts
+00:52 +51: G:/Mlang Presyo/test/domain/domain_test.dart: T13/T14/T18 ledger-based totals and frozen snapshots T14 incomplete estimates suppress a complete projected balance
+00:52 +52: G:/Mlang Presyo/test/domain/domain_test.dart: T13/T14/T18 ledger-based totals and frozen snapshots T16 explicit zero budget produces negative balance without division
+00:52 +53: G:/Mlang Presyo/test/domain/domain_test.dart: T13/T14/T18 ledger-based totals and frozen snapshots only linked ledger entries count toward a list; observations never count
+00:52 +54: G:/Mlang Presyo/test/domain/domain_test.dart: T13/T14/T18 ledger-based totals and frozen snapshots checked aggregate arithmetic rejects overflow instead of wrapping
+00:52 +55: G:/Mlang Presyo/test/domain/domain_test.dart: T13/T14/T18 ledger-based totals and frozen snapshots T18 monthly grouping uses purchase dates and historical category
+00:52 +56: G:/Mlang Presyo/test/domain/domain_test.dart: T13/T14/T18 ledger-based totals and frozen snapshots T17/T19 quote snapshots preserve the frozen calculation basis
+00:52 +57: G:/Mlang Presyo/test/domain/domain_test.dart: T13/T14/T18 ledger-based totals and frozen snapshots T20 archived lists retain their purchase totals
+00:52 +58: G:/Mlang Presyo/test/domain/domain_test.dart: immutable read model constructor detaches and deeply freezes nested snapshots
+00:52 +59: G:/Mlang Presyo/test/domain/domain_test.dart: immutable read model missing references raise readable validation errors and optional store may be null
+00:52 +60: loading G:/Mlang Presyo/test/domain/updated_rows_test.dart
+00:55 +60: G:/Mlang Presyo/test/domain/updated_rows_test.dart: latest rows compare timestamp instants with mixed fractional precision
+00:55 +61: G:/Mlang Presyo/test/domain/updated_rows_test.dart: equal update instants use stable IDs regardless of decimal spelling
+00:55 +62: loading G:/Mlang Presyo/test/migrations/initial_schema_test.dart
+01:03 +62: G:/Mlang Presyo/test/migrations/initial_schema_test.dart: Drift snapshot verifies real initial creation and populated v1 reopen
+01:07 +63: G:/Mlang Presyo/test/migrations/initial_schema_test.dart: Drift verifier detects unexpected tables in the initial schema
+01:09 +64: loading G:/Mlang Presyo/test/performance/search_test.dart
+01:15 +64: G:/Mlang Presyo/test/performance/search_test.dart: HOST ONLY: real Prices search and filters with 2,000 fictional records
+HOST_WIDGET_SEARCH_ONLY records=2000 products=2000 unique_search_and_visible_render_ms=1356.3 (Flutter widget-test host; includes test pumping/scrolling; excludes SQLite fixture setup; no Android-device timing claim)
+01:37 +65: loading G:/Mlang Presyo/test/platform/export_writer_test.dart
+01:47 +65: G:/Mlang Presyo/test/platform/export_writer_test.dart: checked export sends exact UTF-8 bytes and confirms native success
+01:47 +66: G:/Mlang Presyo/test/platform/export_writer_test.dart: native picker cancellation never confirms a backup
+01:47 +67: G:/Mlang Presyo/test/platform/export_writer_test.dart: native provider error is recoverable without exposing private details
+01:47 +68: G:/Mlang Presyo/test/platform/export_writer_test.dart: missing native export bridge never claims a saved backup
+01:47 +69: G:/Mlang Presyo/test/platform/export_writer_test.dart: backup-first canceled export preserves the real notebook and stops restore
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following assertion was thrown running a test:
+pumpAndSettle timed out
+
+When the exception was thrown, this was the stack:
+#0      WidgetTester.pumpAndSettle.<anonymous closure> (package:flutter_test/src/widget_tester.dart:717:11)
+<asynchronous suspension>
+#1      TestAsyncUtils.guard.<anonymous closure> (package:flutter_test/src/test_async_utils.dart:130:27)
+<asynchronous suspension>
+#2      main.<anonymous closure> (file:///G:/Mlang%20Presyo/test/platform/export_writer_test.dart:207:9)
+<asynchronous suspension>
+#3      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#4      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+The test description was:
+  backup-first canceled export preserves the real notebook and stops restore
+════════════════════════════════════════════════════════════════════════════════════════════════════
+01:56 +69 -1: G:/Mlang Presyo/test/platform/export_writer_test.dart: backup-first canceled export preserves the real notebook and stops restore [E]
+  Test failed. See exception logs above.
+  The test description was: backup-first canceled export preserves the real notebook and stops restore
+  
+01:56 +69 -1: G:/Mlang Presyo/test/platform/export_writer_test.dart: backup-first failed export preserves the real notebook and stops restore
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following assertion was thrown running a test:
+pumpAndSettle timed out
+
+When the exception was thrown, this was the stack:
+#0      WidgetTester.pumpAndSettle.<anonymous closure> (package:flutter_test/src/widget_tester.dart:717:11)
+<asynchronous suspension>
+#1      TestAsyncUtils.guard.<anonymous closure> (package:flutter_test/src/test_async_utils.dart:130:27)
+<asynchronous suspension>
+#2      main.<anonymous closure> (file:///G:/Mlang%20Presyo/test/platform/export_writer_test.dart:207:9)
+<asynchronous suspension>
+#3      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#4      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+The test description was:
+  backup-first failed export preserves the real notebook and stops restore
+════════════════════════════════════════════════════════════════════════════════════════════════════
+01:58 +69 -2: G:/Mlang Presyo/test/platform/export_writer_test.dart: backup-first failed export preserves the real notebook and stops restore [E]
+  Test failed. See exception logs above.
+  The test description was: backup-first failed export preserves the real notebook and stops restore
+  
+01:58 +69 -2: G:/Mlang Presyo/test/platform/export_writer_test.dart: canceling the restore preview never invokes export or replacement
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following assertion was thrown running a test:
+pumpAndSettle timed out
+
+When the exception was thrown, this was the stack:
+#0      WidgetTester.pumpAndSettle.<anonymous closure> (package:flutter_test/src/widget_tester.dart:717:11)
+<asynchronous suspension>
+#1      TestAsyncUtils.guard.<anonymous closure> (package:flutter_test/src/test_async_utils.dart:130:27)
+<asynchronous suspension>
+#2      main.<anonymous closure> (file:///G:/Mlang%20Presyo/test/platform/export_writer_test.dart:259:7)
+<asynchronous suspension>
+#3      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#4      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+The test description was:
+  canceling the restore preview never invokes export or replacement
+════════════════════════════════════════════════════════════════════════════════════════════════════
+02:00 +69 -3: G:/Mlang Presyo/test/platform/export_writer_test.dart: canceling the restore preview never invokes export or replacement [E]
+  Test failed. See exception logs above.
+  The test description was: canceling the restore preview never invokes export or replacement
+  
+02:00 +69 -3: loading G:/Mlang Presyo/test/widgets/app_flow_test.dart
+02:05 +69 -3: G:/Mlang Presyo/test/widgets/app_flow_test.dart: first run offers empty notebook and fictional demo without invented statistics
+02:11 +70 -3: G:/Mlang Presyo/test/widgets/app_flow_test.dart: four real tabs remain usable at 320px and 200% text
+02:15 +71 -3: G:/Mlang Presyo/test/widgets/app_flow_test.dart: confirmed local reset allows onboarding again in the same process
+02:18 +72 -3: G:/Mlang Presyo/test/widgets/app_flow_test.dart: demo label persists on a pushed price form
+02:19 +73 -3: G:/Mlang Presyo/test/widgets/app_flow_test.dart: canceling an actual purchase changes neither ledger nor Needed state
+02:21 +74 -3: G:/Mlang Presyo/test/widgets/app_flow_test.dart: actual purchase Save is explicit and duplicate taps record one expense
+02:22 +75 -3: G:/Mlang Presyo/test/widgets/app_flow_test.dart: failed price save keeps form values and allows a successful retry
+02:25 +76 -3: G:/Mlang Presyo/test/widgets/app_flow_test.dart: in-flight price save blocks inline creation and system back until completion
+02:28 +77 -3: G:/Mlang Presyo/test/widgets/app_flow_test.dart: in-flight linked purchase blocks back and records one atomic purchase
+02:29 +78 -3: G:/Mlang Presyo/test/widgets/app_flow_test.dart: changing quantity while a manual estimate is hidden requires reconfirmation
+02:30 +79 -3: G:/Mlang Presyo/test/widgets/app_flow_test.dart: inline store creation returns to the price draft without losing inputs
+02:33 +80 -3: G:/Mlang Presyo/test/widgets/app_flow_test.dart: inline product with the same measurement kind preserves kg and decimal quantity
+02:36 +81 -3: G:/Mlang Presyo/test/widgets/app_flow_test.dart: price form retains visible Save with keyboard and 200% text
+02:37 +82 -3: G:/Mlang Presyo/test/widgets/app_flow_test.dart: price filters recover after catalog edits and replacement restore
+WARNING (drift): It looks like you've created the database class AppDatabase multiple times. When these two databases use the same QueryExecutor, race conditions will occur and might corrupt the database. 
+Try to follow the advice at https://drift.simonbinder.eu/faq/#using-the-database or, if you know what you're doing, set driftRuntimeOptions.dontWarnAboutMultipleDatabases = true
+Here is the stacktrace from when the database was opened a second time:
+#0      GeneratedDatabase._handleInstantiated (package:drift/src/runtime/api/db_base.dart:96:30)
+#1      GeneratedDatabase._whenConstructed (package:drift/src/runtime/api/db_base.dart:73:12)
+#2      new GeneratedDatabase (package:drift/src/runtime/api/db_base.dart:64:5)
+#3      new AppDatabase.memory (package:presyo_mlang/data/database.dart:10:26)
+#4      main.<anonymous closure> (file:///G:/Mlang%20Presyo/test/widgets/app_flow_test.dart:739:53)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+#7      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+This warning will only appear on debug builds.
+02:39 +83 -3: G:/Mlang Presyo/test/widgets/app_flow_test.dart: failed monthly budget save preserves the dialog draft for retry
+02:40 +84 -3: G:/Mlang Presyo/test/widgets/app_flow_test.dart: list price chooser requires explicit opt-in before selecting older offers
+02:43 +85 -3: G:/Mlang Presyo/test/widgets/app_flow_test.dart: date picker supports the earliest accepted backup date
+02:45 +86 -3: G:/Mlang Presyo/test/widgets/app_flow_test.dart: rendered fictional workflows provide phone-sized visual QA artifacts
+02:56 +87 -3: G:/Mlang Presyo/test/widgets/app_flow_test.dart: primary text and actions meet the ordinary-text contrast target
+02:56 +88 -3: loading G:/Mlang Presyo/test/widgets/latest_list_test.dart
+03:09 +88 -3: G:/Mlang Presyo/test/widgets/latest_list_test.dart: Home and Lists show the actual newest restored shopping list
+03:17 +89 -3: Some tests failed.
+
+Failing tests:
+  G:/Mlang Presyo/test/platform/export_writer_test.dart: backup-first canceled export preserves the real notebook and stops restore
+  G:/Mlang Presyo/test/platform/export_writer_test.dart: backup-first failed export preserves the real notebook and stops restore
+  G:/Mlang Presyo/test/platform/export_writer_test.dart: canceling the restore preview never invokes export or replacement

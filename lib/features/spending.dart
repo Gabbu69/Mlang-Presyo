@@ -99,6 +99,7 @@ class _PurchaseFormState extends ConsumerState<PurchaseForm> {
       title: widget.existing == null
           ? 'Record actual purchase'
           : 'Edit actual purchase',
+      busy: _busy,
       child: Column(
         children: [
           Expanded(

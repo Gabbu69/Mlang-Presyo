@@ -18,6 +18,7 @@ import 'package:presyo_mlang/core/models.dart';
 import 'package:presyo_mlang/data/database.dart';
 import 'package:presyo_mlang/data/repository.dart';
 import 'package:presyo_mlang/features/common.dart';
+import 'package:presyo_mlang/features/catalog.dart';
 import 'package:presyo_mlang/features/prices.dart';
 import 'package:presyo_mlang/features/lists.dart';
 import 'package:presyo_mlang/features/spending.dart';
@@ -68,6 +69,28 @@ class FailOnceBudgetRepository extends AppRepository {
       await firstWrite.future;
     }
     await super.setMonthlyBudget(month, centavos);
+  }
+}
+
+class HeldWriteRepository extends AppRepository {
+  HeldWriteRepository(super.db);
+  final priceWrite = Completer<void>();
+  final purchaseWrite = Completer<void>();
+  int priceSaveCalls = 0;
+  int purchaseSaveCalls = 0;
+
+  @override
+  Future<void> savePrice(Row input) async {
+    priceSaveCalls++;
+    await priceWrite.future;
+    await super.savePrice(input);
+  }
+
+  @override
+  Future<void> savePurchase(Row input) async {
+    purchaseSaveCalls++;
+    await purchaseWrite.future;
+    await super.savePurchase(input);
   }
 }
 
@@ -285,13 +308,14 @@ void main() {
       final repository = AppRepository(AppDatabase.memory());
       addTearDown(repository.close);
       await mount(tester, repository, scale: 2);
-      await tester.scrollUntilVisible(
-        find.text('Start empty'),
-        250,
-        scrollable: find.byType(Scrollable).first,
-      );
-      expect(find.text('Start empty'), findsOneWidget);
-      expect(find.text('Try fictional demo'), findsOneWidget);
+      // These are separate lazy children and need not be built together on a
+      // narrow screen at 200% text. Verify that each action can be reached.
+      for (final label in ['Start empty', 'Try fictional demo']) {
+        final action = find.text(label);
+        await reveal(tester, action);
+        expect(action, findsOneWidget);
+        expect(action.hitTestable(), findsOneWidget);
+      }
       expect((await repository.load()).prices, isEmpty);
       expect(tester.takeException(), isNull);
     },
@@ -430,6 +454,134 @@ void main() {
       await settle(tester);
       expect((await repository.load()).prices.single['quoted_centavos'], 4550);
       expect(find.text('Open test form'), findsOneWidget);
+    },
+  );
+
+  testWidgets(
+    'in-flight price save blocks inline creation and system back until completion',
+    (tester) async {
+      final repository = HeldWriteRepository(AppDatabase.memory());
+      addTearDown(repository.close);
+      await seed(repository);
+      await mount(
+        tester,
+        repository,
+        form: const PriceForm(productId: productId),
+      );
+      await selectStore(tester);
+      await enter(tester, 'Total quoted price (PHP)', '45.50');
+      await enter(tester, 'Quantity covered by this price', '500');
+      await reveal(tester, find.text('Add store here'));
+      await tester.tap(find.text('Save'));
+      await tester.pump();
+      expect(repository.priceSaveCalls, 1);
+      expect(find.text('Saving…'), findsOneWidget);
+      // Deliberately tap the protected action to prove no child route opens.
+      await tester.tap(find.text('Add store here'), warnIfMissed: false);
+      await tester.pump();
+      expect(find.byType(CatalogForm), findsNothing);
+      await tester.binding.handlePopRoute();
+      await tester.pump();
+      expect(find.byType(PriceForm), findsOneWidget);
+      expect((await repository.load()).prices, isEmpty);
+      repository.priceWrite.complete();
+      await settle(tester);
+      final saved = await repository.load();
+      expect(saved.prices, hasLength(1));
+      expect(saved.prices.single['quoted_centavos'], 4550);
+      expect(saved.stores, hasLength(1));
+      expect(find.byType(PriceForm), findsNothing);
+      expect(find.text('Open test form'), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    },
+  );
+
+  testWidgets(
+    'in-flight linked purchase blocks back and records one atomic purchase',
+    (tester) async {
+      final repository = HeldWriteRepository(AppDatabase.memory());
+      addTearDown(repository.close);
+      await seed(repository, shoppingList: true);
+      final item = (await repository.load()).items.single;
+      await mount(tester, repository, form: PurchaseForm(item: item));
+      await enter(tester, 'Actual total paid (PHP)', '165');
+      await tester.tap(find.text('Save actual purchase'));
+      await tester.pump();
+      await tester.binding.handlePopRoute();
+      await tester.pump();
+      expect(find.byType(PurchaseForm), findsOneWidget);
+      expect(repository.purchaseSaveCalls, 1);
+      final pending = await repository.load();
+      expect(pending.purchases, isEmpty);
+      expect(pending.items.single['status'], 'needed');
+      repository.purchaseWrite.complete();
+      await settle(tester);
+      final saved = await repository.load();
+      expect(saved.purchases, hasLength(1));
+      expect(saved.purchases.single['actual_total_centavos'], 16500);
+      expect(saved.items.single['status'], 'bought');
+      expect(listTotals(saved, listId).actualSpent, 16500);
+      expect(find.byType(PurchaseForm), findsNothing);
+      expect(find.text('Open test form'), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    },
+  );
+
+  testWidgets(
+    'changing quantity while a manual estimate is hidden requires reconfirmation',
+    (tester) async {
+      final repository = AppRepository(AppDatabase.memory());
+      addTearDown(repository.close);
+      await seed(repository, shoppingList: true);
+      await repository.saveItem({
+        'id': itemId,
+        'estimate_mode': 'manual',
+        'estimate_total_centavos': 10000,
+      });
+      final item = (await repository.load()).items.single;
+      await mount(
+        tester,
+        repository,
+        form: ItemForm(listId: listId, existing: item),
+      );
+      Future<void> selectMode(String label) async {
+        final picker = find.widgetWithText(
+          DropdownButtonFormField<String>,
+          'How to estimate',
+        );
+        await reveal(tester, picker);
+        await tester.tap(picker);
+        await settle(tester);
+        await tester.tap(find.text(label).last);
+        await settle(tester);
+      }
+
+      await selectMode('Not estimated yet');
+      await enter(tester, 'Quantity you need', '1000');
+      await selectMode('Manual total for this item');
+      await reveal(tester, input('Estimated total (PHP)'));
+      expect(
+        tester
+            .widget<TextFormField>(input('Estimated total (PHP)'))
+            .controller!
+            .text,
+        isEmpty,
+      );
+      await tester.tap(find.text('Save'));
+      await settle(tester);
+      expect(find.byType(ItemForm), findsOneWidget);
+      final unchanged = (await repository.load()).items.single;
+      expect(unchanged['requested_quantity_base'], 750);
+      expect(unchanged['estimate_total_centavos'], 10000);
+      await enter(tester, 'Estimated total (PHP)', '120');
+      await tester.tap(find.text('Save'));
+      await settle(tester);
+      final saved = (await repository.load()).items.single;
+      expect(saved['requested_quantity_base'], 1000);
+      expect(saved['estimate_total_centavos'], 12000);
+      expect(saved['estimate_mode'], 'manual');
+      expect(find.text('Open test form'), findsOneWidget);
+      expect(tester.takeException(), isNull);
     },
   );
 

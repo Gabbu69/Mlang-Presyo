@@ -6,10 +6,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../app/controller.dart';
 import '../app/strings.dart';
 import '../core/domain.dart';
+import '../core/location.dart';
 import '../core/models.dart';
 import 'catalog.dart';
 import 'common.dart';
 import 'lists.dart';
+import 'location.dart';
 
 class PriceForm extends ConsumerStatefulWidget {
   const PriceForm({super.key, this.existing, this.productId});
@@ -121,6 +123,7 @@ class _PriceFormState extends ConsumerState<PriceForm> {
     };
     return AppPage(
       title: widget.existing == null ? 'Add price' : 'Edit price',
+      busy: _busy,
       child: Column(
         children: [
           Expanded(
@@ -284,10 +287,24 @@ class PricesPage extends ConsumerStatefulWidget {
 }
 
 class _PricesPageState extends ConsumerState<PricesPage> {
+  final _searchController = TextEditingController();
   String _search = '', _category = '', _store = '';
+  bool _allAreas = false;
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final data = ref.watch(appProvider).requireValue;
+    final area = ShoppingArea.fromSettings(data.settings);
+    final scopedPrices = pricesInArea(
+      data,
+      _allAreas ? const ShoppingArea() : area,
+    );
     final categories =
         data.products.map((p) => p['category'] as String).toSet().toList()
           ..sort();
@@ -296,7 +313,7 @@ class _PricesPageState extends ConsumerState<PricesPage> {
     final category = categories.contains(_category) ? _category : '';
     final store = data.stores.any((s) => s['id'] == _store) ? _store : '';
     final rows =
-        data.prices.where((r) {
+        scopedPrices.where((r) {
           final product = data.product(r['product_id'] as String);
           return productName(
                 product,
@@ -316,6 +333,12 @@ class _PricesPageState extends ConsumerState<PricesPage> {
         ),
         const SizedBox(height: 8),
         const Text(English.yourOwnDatedObservationsAroundMLang),
+        AreaScopeControls(
+          data: data,
+          area: area,
+          allAreas: _allAreas,
+          onAllAreasChanged: (value) => setState(() => _allAreas = value),
+        ),
         fieldGap(),
         FilledButton.icon(
           onPressed: () => Navigator.push(
@@ -327,6 +350,7 @@ class _PricesPageState extends ConsumerState<PricesPage> {
         ),
         fieldGap(),
         TextField(
+          controller: _searchController,
           decoration: const InputDecoration(
             labelText: English.searchProducts,
             prefixIcon: Icon(Icons.search),
@@ -373,13 +397,19 @@ class _PricesPageState extends ConsumerState<PricesPage> {
         if (rows.isEmpty)
           EmptyCard(
             icon: Icons.price_change_outlined,
-            title: data.prices.isEmpty
+            title: scopedPrices.isEmpty && !area.isAll && !_allAreas
+                ? English.noPricesInArea
+                : data.prices.isEmpty
                 ? 'Begin your price notebook'
                 : 'No matching records',
-            message: data.prices.isEmpty
+            message: scopedPrices.isEmpty && !area.isAll && !_allAreas
+                ? 'Location shows only your own saved prices. Add a store and price here, tag an existing store, or show all areas.'
+                : data.prices.isEmpty
                 ? 'Record an item you buy regularly. Your first price stays available offline.'
                 : 'Try another product, category, or store.',
           ),
+        if (scopedPrices.isEmpty && !area.isAll && !_allAreas)
+          const AreaPriceEmptyActions(),
         ...rows.map(
           (r) => PriceCard(
             price: r,
@@ -387,8 +417,10 @@ class _PricesPageState extends ConsumerState<PricesPage> {
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute<void>(
-                builder: (_) =>
-                    ProductDetail(productId: r['product_id'] as String),
+                builder: (_) => ProductDetail(
+                  productId: r['product_id'] as String,
+                  initialAllAreas: _allAreas,
+                ),
               ),
             ),
           ),
@@ -446,6 +478,11 @@ class PriceCard extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               Text(store?['name'] as String? ?? 'Archived store'),
+              if (store != null)
+                StoreLocationText(
+                  store: store,
+                  area: ShoppingArea.fromSettings(data.settings),
+                ),
               Text(
                 '${price['observed_on']} · ${ageLabel(price['observed_on'] as String)}',
               ),
@@ -467,25 +504,42 @@ class PriceCard extends StatelessWidget {
 }
 
 class ProductDetail extends ConsumerStatefulWidget {
-  const ProductDetail({super.key, required this.productId});
+  const ProductDetail({
+    super.key,
+    required this.productId,
+    this.initialAllAreas = false,
+  });
   final String productId;
+  final bool initialAllAreas;
   @override
   ConsumerState<ProductDetail> createState() => _ProductDetailState();
 }
 
 class _ProductDetailState extends ConsumerState<ProductDetail> {
   bool _older = false;
+  late bool _allAreas;
+  @override
+  void initState() {
+    super.initState();
+    _allAreas = widget.initialAllAreas;
+  }
+
   @override
   Widget build(BuildContext context) {
     final data = ref.watch(appProvider).requireValue;
     final product = data.product(widget.productId);
+    final area = ShoppingArea.fromSettings(data.settings);
+    final scopedPrices = pricesInArea(
+      data,
+      _allAreas ? const ShoppingArea() : area,
+    );
     final candidates = comparablePrices(
-      data.prices,
+      scopedPrices,
       widget.productId,
       older: _older,
     );
     final history =
-        data.prices.where((p) => p['product_id'] == widget.productId).toList()
+        scopedPrices.where((p) => p['product_id'] == widget.productId).toList()
           ..sort(
             (a, b) => (b['observed_on'] as String).compareTo(
               a['observed_on'] as String,
@@ -506,6 +560,12 @@ class _ProductDetailState extends ConsumerState<ProductDetail> {
             label: const Text(English.recordAnotherPrice),
           ),
           const SectionTitle('Compare recorded offers'),
+          AreaScopeControls(
+            data: data,
+            area: area,
+            allAreas: _allAreas,
+            onAllAreasChanged: (value) => setState(() => _allAreas = value),
+          ),
           const Text(English.lowestRecordedUnitPriceAmongTheseRecordsABetter),
           SwitchListTile(
             contentPadding: EdgeInsets.zero,
@@ -516,11 +576,17 @@ class _ProductDetailState extends ConsumerState<ProductDetail> {
             value: _older,
             onChanged: (v) => setState(() => _older = v),
           ),
+          if (history.isEmpty && !area.isAll && !_allAreas)
+            AreaPriceEmptyActions(productId: widget.productId),
           if (candidates.isEmpty)
-            const EmptyCard(
+            EmptyCard(
               icon: Icons.history,
-              title: English.noRecentComparableRecords,
-              message: English.recordARegularPriceOrEnableShowOlderRecords,
+              title: history.isEmpty && !area.isAll && !_allAreas
+                  ? English.noPricesInArea
+                  : English.noRecentComparableRecords,
+              message: history.isEmpty && !area.isAll && !_allAreas
+                  ? 'Add a store and price here, tag an existing store, or show all areas.'
+                  : English.recordARegularPriceOrEnableShowOlderRecords,
             ),
           ...candidates.map(
             (r) => PriceCard(
@@ -538,6 +604,7 @@ class _ProductDetailState extends ConsumerState<ProductDetail> {
           ),
           const Text(AppStrings.priceReminder),
           const SectionTitle('Price history'),
+          if (history.isEmpty) const Text(English.noHistoryInScope),
           ...history.map(
             (r) => PriceCard(
               price: r,
@@ -582,4 +649,37 @@ class _ProductDetailState extends ConsumerState<ProductDetail> {
       ),
     );
   }
+}
+
+class AreaPriceEmptyActions extends StatelessWidget {
+  const AreaPriceEmptyActions({super.key, this.productId});
+  final String? productId;
+  @override
+  Widget build(BuildContext context) => Wrap(
+    spacing: 8,
+    children: [
+      TextButton.icon(
+        onPressed: () => Navigator.push<String>(
+          context,
+          MaterialPageRoute(builder: (_) => const CatalogForm(product: false)),
+        ),
+        icon: const Icon(Icons.add_business_outlined),
+        label: const Text(English.addStore),
+      ),
+      TextButton(
+        onPressed: () => Navigator.push<void>(
+          context,
+          MaterialPageRoute(builder: (_) => const CatalogPage(products: false)),
+        ),
+        child: const Text(English.tagExistingStore),
+      ),
+      TextButton(
+        onPressed: () => Navigator.push<void>(
+          context,
+          MaterialPageRoute(builder: (_) => PriceForm(productId: productId)),
+        ),
+        child: const Text(English.addPrice),
+      ),
+    ],
+  );
 }

@@ -23,17 +23,17 @@ void main() {
   });
 
   test(
-    'Drift snapshot verifies real initial creation and populated v1 reopen',
+    'Drift snapshot verifies real initial creation and populated v2 reopen',
     () async {
       final file = File('${directory.path}/notebook.sqlite');
       var database = AppDatabase.file(file);
       var repository = AppRepository(database, clock: () => now);
       try {
-        // Version 1 is the first schema: this opens an empty file and invokes the
-        // real onCreate, rather than inventing an upgrade from an unreleased v0.
+        // This opens an empty file and invokes the real v2 onCreate. The
+        // separate migration suite starts from the actual historical v1 schema.
         await verifier.migrateAndValidate(
           database,
-          1,
+          2,
           options: const ValidationOptions(validateDropped: true),
         );
         await fixtures(repository);
@@ -45,7 +45,7 @@ void main() {
         repository = AppRepository(database, clock: () => now);
         await verifier.migrateAndValidate(
           database,
-          1,
+          2,
           options: const ValidationOptions(validateDropped: true),
         );
         final reopened = await repository.load();
@@ -81,7 +81,7 @@ void main() {
         await expectLater(
           verifier.migrateAndValidate(
             database,
-            1,
+            2,
             options: const ValidationOptions(validateDropped: true),
           ),
           throwsA(isA<SchemaMismatch>()),

@@ -5,26 +5,33 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../app/controller.dart';
 import '../app/strings.dart';
+import '../core/domain.dart';
+import '../core/location.dart';
 import 'common.dart';
 import 'lists.dart';
+import 'location.dart';
 import 'prices.dart';
 
-class HomePage extends ConsumerWidget {
+class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends ConsumerState<HomePage> {
+  bool _allAreas = false;
+  @override
+  Widget build(BuildContext context) {
     final data = ref.watch(appProvider).requireValue;
+    final area = ShoppingArea.fromSettings(data.settings);
     final active = data.lists.where((l) => l['status'] == 'active').toList()
-      ..sort(
-        (a, b) => (b['updated_at_utc'] as String).compareTo(
-          a['updated_at_utc'] as String,
-        ),
-      );
-    final recent = [...data.prices]
-      ..sort(
-        (a, b) =>
-            (b['observed_on'] as String).compareTo(a['observed_on'] as String),
-      );
+      ..sort(compareUpdatedRows);
+    final recent =
+        [...pricesInArea(data, _allAreas ? const ShoppingArea() : area)]..sort(
+          (a, b) => (b['observed_on'] as String).compareTo(
+            a['observed_on'] as String,
+          ),
+        );
     return PagePadding(
       children: [
         if (MediaQuery.textScalerOf(context).scale(1) <= 1.5) ...[
@@ -84,6 +91,8 @@ class HomePage extends ConsumerWidget {
             ),
           ],
         ),
+        fieldGap(),
+        const ShoppingAreaCard(),
         const SectionTitle('Your next shopping trip'),
         if (active.isEmpty)
           const EmptyCard(
@@ -113,11 +122,22 @@ class HomePage extends ConsumerWidget {
           ),
         ],
         const SectionTitle('Recently recorded'),
+        AreaScopeControls(
+          data: data,
+          area: area,
+          allAreas: _allAreas,
+          showChangeArea: false,
+          onAllAreasChanged: (value) => setState(() => _allAreas = value),
+        ),
         if (recent.isEmpty)
-          const EmptyCard(
+          EmptyCard(
             icon: Icons.price_change_outlined,
-            title: English.rememberAPriceForNextTime,
-            message: English.startYourPriceNotebookByRecordingAnItemYou,
+            title: !area.isAll && !_allAreas
+                ? English.noPricesInArea
+                : English.rememberAPriceForNextTime,
+            message: !area.isAll && !_allAreas
+                ? 'Your phone location filters your own saved records. Add a store and price here, tag an existing store, or show all areas.'
+                : English.startYourPriceNotebookByRecordingAnItemYou,
           )
         else
           ...recent
@@ -131,11 +151,14 @@ class HomePage extends ConsumerWidget {
                     MaterialPageRoute<void>(
                       builder: (_) => ProductDetail(
                         productId: price['product_id'] as String,
+                        initialAllAreas: _allAreas,
                       ),
                     ),
                   ),
                 ),
               ),
+        if (recent.isEmpty && !area.isAll && !_allAreas)
+          const AreaPriceEmptyActions(),
         const Padding(
           padding: EdgeInsets.symmetric(vertical: 12),
           child: Text(AppStrings.priceReminder),

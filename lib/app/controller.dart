@@ -11,6 +11,18 @@ final appProvider = AsyncNotifierProvider<AppController, AppData>(
   AppController.new,
 );
 
+/// A committed write must never be retried just because its follow-up read failed.
+final notebookReloadNeededProvider =
+    NotifierProvider<NotebookReloadStatus, bool>(NotebookReloadStatus.new);
+
+class NotebookReloadStatus extends Notifier<bool> {
+  @override
+  bool build() => false;
+
+  void markNeeded() => state = true;
+  void clear() => state = false;
+}
+
 class AppController extends AsyncNotifier<AppData> {
   AppRepository? _repository;
   Directory? _directory;
@@ -42,12 +54,38 @@ class AppController extends AsyncNotifier<AppData> {
   }
 
   Future<void> refresh() async {
-    state = await AsyncValue.guard(() => repository.load());
+    await _reload(repository);
   }
 
-  Future<void> change(Future<void> Function(AppRepository) action) async {
-    await action(repository);
-    state = AsyncData(await repository.load());
+  /// False means the write committed, but the shell must reload before editing.
+  Future<bool> change(Future<void> Function(AppRepository) action) async {
+    if (ref.read(notebookReloadNeededProvider)) return false;
+    final activeRepository = repository;
+    await action(activeRepository);
+    if (!ref.mounted) return false;
+    return _reload(activeRepository, afterCommittedWrite: true);
+  }
+
+  Future<bool> _reload(
+    AppRepository activeRepository, {
+    bool afterCommittedWrite = false,
+  }) async {
+    final loaded = await AsyncValue.guard(activeRepository.load);
+    if (!ref.mounted || !identical(repository, activeRepository)) return false;
+    final reloadStatus = ref.read(notebookReloadNeededProvider.notifier);
+    if (loaded.hasError) {
+      if (afterCommittedWrite || ref.read(notebookReloadNeededProvider)) {
+        // Keep the last snapshot usable while existing routes return to the
+        // recovery screen. Further writes are blocked until a read succeeds.
+        reloadStatus.markNeeded();
+      } else {
+        state = loaded;
+      }
+      return false;
+    }
+    state = loaded;
+    reloadStatus.clear();
+    return true;
   }
 
   Future<void> switchMode(bool demo) async {

@@ -1,4 +1,4 @@
-# Acceptance tests - Presyo M'lang
+# Acceptance tests - PresyoGo
 
 These are required test specifications, not tests already run. All prices and stores below are fictional fixtures. Use deterministic clocks and in-memory/test databases; never use real user shopping data as test fixtures.
 
@@ -70,7 +70,7 @@ These are required test specifications, not tests already run. All prices and st
 
 **T29 Demo isolation.** Fresh real mode has no fictional prices or spending. Every demo screen shows a persistent sample-data label. Switching databases does not mix records. Demo records are excluded from real backups and spending.
 
-**T30 Permission/network review.** Inspect the release manifest and dependency behavior. No unexpected contacts, GPS, camera, microphone, broad storage, analytics, ads, or app-initiated network calls. Document any development-only permission separately.
+**T30 Permission/network review.** Inspect the compiled manifest and dependency behavior. Only optional foreground coarse/fine location is allowed after an explicit button tap. No startup/background location, contacts, camera, microphone, broad storage, analytics, ads, or app-initiated network calls. Document Flutter's debug-only Internet permission separately.
 
 **T31 Backup policy.** Review the Android cloud-backup and data-extraction configuration for supported API levels. Test where possible. Do not equate allowBackup=false alone with verified prevention of every manufacturer-specific device transfer.
 
@@ -83,6 +83,42 @@ These are required test specifications, not tests already run. All prices and st
 **T35 Actual build evidence.** Record actual formatting, analysis, unit/widget/integration test results and any NOT RUN checks. Verify the produced APK path and install/open it on a named Android device when available. A UI screenshot alone is insufficient.
 
 **T36 Signing and scope.** A development APK is labeled as such. Public release requires owner-controlled release signing, not debug signing hidden in a release configuration. No backend, public posting, paid service, or publication is created by these milestones.
+
+## Location and PresyoGo update — 0.2.0+3
+
+**T37 Shopping area.** All areas is the initial default. Manual area labels match
+after case/whitespace normalization. Phone location is captured only on a button
+tap. Preview radius (5/10/25 km; default 10), coordinates, accuracy and capture
+time before Save. Cancel leaves the prior saved choice unchanged. A saved center
+does not move automatically; Refresh location requires another explicit tap.
+
+**T38 Location recovery.** Test approximate/precise grants, denial, disabled
+providers, a 20-second acquisition timeout, stale/invalid fixes and lifecycle
+cancellation. Offer Retry, manual selection and All areas without losing the
+prior saved scope. Repeated taps must not create competing requests or writes.
+
+**T39 Explicit store tags.** Store area/GPS tags are optional and persist only
+after saving the store form. Tagging and removing a tag are explicit actions.
+Cancel changes nothing. Shopping area changes never tag or move existing stores.
+
+**T40 Consistent scope.** Apply area scope to Home recent records, price browsing,
+product comparisons/history and list-estimate offer selection. Test inside, on
+and outside radius boundaries, unlocated stores and normalized manual labels.
+Explain excluded stores and offer a screen-local Show all areas override. With
+no matching prices, offer Add store, Add price and Show all areas. Lists, spending,
+historical purchases and frozen estimates remain accessible and unchanged.
+
+**T41 Location compatibility.** Upgrade a genuinely populated schema 1 database
+to schema 2 and compare every original record, snapshot and total; validate
+foreign keys and reopen. Import actual format 1 and round-trip format 2 backups.
+Reject malformed or partial location tags before mutation. Test restore rollback
+and formula-safe CSV location text. Export warnings disclose unencrypted tags.
+
+**T42 Rename and delivery.** The title/launcher/About/dialogs say PresyoGo and the
+isolated app says PresyoGo Tests. Keep package IDs, channels, signing identity,
+database paths and old backup compatibility. Inspect the 0.2.0+3 debug APK and
+record its hash. Test 200% text, keyboard visibility and screen-reader feedback.
+Never uninstall the personal notebook to resolve an update failure.
 
 ## Suggested pilot observations
 

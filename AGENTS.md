@@ -1,4 +1,4 @@
-# Project instructions - Presyo M'lang
+# Project instructions - PresyoGo
 
 ## Mission and scope
 

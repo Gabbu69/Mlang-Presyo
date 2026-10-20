@@ -1,6 +1,98 @@
-# Verification record — Presyo M’lang 0.1.0
+# Verification record — PresyoGo
 
-Date: 16 October 2026, Asia/Manila. Application ID: `app.presyomlang.personal`.
+Timezone: Asia/Manila. Application ID: `app.presyomlang.personal`.
+
+## Current PresyoGo milestone — 18 October 2026, 0.2.0+3
+
+Implements the approved location + rename plan: optional user-tapped phone
+location, saved center/radius and manual areas; explicit store tags; scoped Home
+prices, Prices, product comparison/history and list quote selection; safe All
+areas recovery; visible PresyoGo branding with unchanged application identity.
+Database schema 2 and backup format 2 retain v1 upgrade/import compatibility.
+
+The schema export completed using the actual v2 database. Historical v1 fixtures
+remain unchanged. Focused data checks passed except a test initially expecting a
+direct SQLite exception from a background database; that test now checks Drift's
+remote wrapper and the exact foreign-key error. Both migration tests passed on
+rerun. Initial widget failures were test-host/selector synchronization issues and
+are being corrected while preserving behavioral assertions.
+
+| Check | Current result and evidence |
+|---|---|
+| Toolchain | PASS — Flutter 3.47.7 / Dart 3.13.5 / DevTools 2.60.0, project JDK 17.0.20.1+1; `presyogo-toolchain.log` |
+| Schema generation and v1 preservation | PASS — actual v2 SQLite source, readable/official v2 snapshots and generated helpers; retained v1 snapshots/helper and dependency lockfile unchanged |
+| Non-writing format check | PASS — 48 files, 0 changes; `presyogo-format.log` |
+| Static analysis | PASS — no issues, 32.5 seconds; `presyogo-analyze.log` |
+| Complete Flutter suite | PASS — 148/148, 2 minutes 41 seconds, exit 0; `presyogo-tests.log` |
+| Android JVM / compiled release manifest | IN PROGRESS — `presyogo-native-tests.log` |
+| 0.2.0+3 debug APK build / inspection | PENDING |
+
+The final suite includes true v1-to-v2 migration/rollback, v2 creation/reopen and
+foreign keys; old/new backups and location validation before restore; persistence
+and frozen snapshots; integer-extreme regressions; 19 location widget flows and
+14 channel cases; narrow/200% text, keyboard, touch targets and contrast checks.
+Drift's debug warnings occur in tests deliberately opening independent database
+connections, not a shared executor. Five fictional demo PNGs under
+`docs/screenshots/` were generated and visually reviewed; they are host renders,
+not phone screenshots. The earlier initial full run and format/analysis findings
+are preserved in `presyogo-*-initial.log` and BUILD_LOG.md.
+
+`adb devices -l` found no connected/authorized device. This update's physical
+install/open, approximate/precise permission dialogs, live GPS/network fixes,
+disabled providers, device cancellation/timeout, airplane-mode force-stop/restart,
+TalkBack, actual file providers, storage-full and manufacturer transfer checks
+are **NOT RUN**. Public release signing, distribution and pilot acceptance are
+also not performed by this local milestone.
+
+## Historical review update — 17 October 2026, 0.1.1+2
+
+The review implements pending-save navigation/back protection, clearing hidden
+manual estimates after quantity changes, parsed UTC list ordering, committed-write
+reload recovery, full frozen-snapshot validation and aggregate row/UTF-8 backup
+capacity checks. A small Android bridge confirms export only after checked write,
+flush and close. The integration package is isolated from the personal notebook.
+An initial phone run also exposed loss of the search field's text when its lazy
+widget was disposed while the filter remained active. A parent-owned controller
+now preserves the query and allows clearing it after recreation; the regression
+proves actual EditableTextState disposal/recreation and retained query behavior.
+Schema **1** and JSON backup format **1** are unchanged. Details and named
+regressions are in `V1_REVIEW_2026-10-17.md`.
+
+| Check | Current result and evidence |
+|---|---|
+| Initial review complete host run | FAIL, repaired — 89 passed / 3 restore-widget synchronization failures; `review-tests.log`. Bounded state waits preserve the cancellation, unchanged-data and no-replacement assertions. |
+| Focused export/restore after synchronization repair | PASS — 7 tests; `review-platform-tests.log` |
+| Host checks before the phone-discovered fix | PASS — 92 tests and analysis before the new search-retention correction; retained in `review-tests-before-phone-fix.log` and `review-analyze-before-phone-fix.log` |
+| Final review static analysis after search fix | PASS — No issues found, 42.6 seconds; `review-analyze-final.log` |
+| Final review complete Flutter suite after search fix | PASS — All 93 tests, 2 minutes 31 seconds; `review-tests-final.log` |
+| Final formatting | PASS — 38 files, zero changes; `review-format-check.log` |
+| Final review host 2,000-record search/render | PASS, host only — 852.434 ms. Includes widget pumping/scrolling and excludes SQLite fixture setup; no phone timing claim. |
+| Native JVM stream-writer tests | PASS — 7 tests, zero failures/errors/skips; Gradle 7m45s, `review-native-tests.log` |
+| Initial isolated APK package/installation | PASS — verified `app.presyomlang.personal.integration`; actual installation took 9.7 seconds. An uppercase Gradle flag mismatch was caught by the package guard before the first install and corrected. |
+| First physical SQLite integration journey | PASS on TECNO KL7 — shopping/purchase state, SQLite close/reopen, backup round-trip and Home/Spending rendering; `review-phone-integration-first.log` |
+| First physical 2,000-record search/filter run | FAIL — unique search/render measured 1581.394 ms, then clearing the recreated input left its old filter active. This is a failed full flow, not a phone performance pass. Bug fixed; assertions retained and a retained-query assertion added. |
+| Corrected complete phone integration rerun | PENDING — an interrupted attempt had no final result; the resumed full run is not claimed passed until completion. |
+| Updated normal APK | PENDING build, personal installation/open and version-specific output inspection |
+| 0.1.1 artifact size/hash/signature/alignment/permissions | PENDING — the old 0.1.0 artifact below is not update evidence |
+| Actual normal-app install/open and manual checks | AUTHORIZED / PENDING — TECNO KL7, Android 14/API 34, current user 0 |
+| Updated source commit/push | PENDING final checks and verified Git evidence |
+
+The phone was found authorized and without a Presyo installation for current
+user 0 before this update's device checks. Other device users were not assessed.
+Its availability supersedes the original deferral. No serial or debug-service
+authentication URI is included in this record. Airplane-mode force-stop/reopen,
+actual document picker/export/restore, TalkBack, physical storage-full behavior,
+manufacturer transfer and successful complete named-phone performance checks
+require observed results. See `PHONE_RESULTS_2026-10-17.md` for the separate
+device record; the earlier SQLite pass does not imply the failed search test or
+the pending corrected rerun passed.
+
+## Historical 0.1.0+1 delivery — 16 October 2026
+
+The sections below preserve the original delivery's evidence. Its earlier
+phone-deferral statements and 69-test/0.1.0 APK results describe that baseline;
+the current update's authorized device checks and pending publication are tracked
+above.
 
 ## Observed automated results
 

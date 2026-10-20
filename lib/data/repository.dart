@@ -5,6 +5,7 @@ import 'package:uuid/uuid.dart';
 import '../core/domain.dart';
 import '../core/models.dart';
 import 'database.dart';
+import 'portability.dart';
 import 'validation.dart';
 
 class AppRepository {
@@ -134,7 +135,10 @@ class AppRepository {
     );
   }
 
-  void _validate(AppData data) => validateAppData(data, now: _clock());
+  void _validate(AppData data) {
+    validateAppData(data, now: _clock());
+    validateBackupCapacity(data);
+  }
 
   Future<void> saveProduct(Row input) => db.transaction(() async {
     final data = await _read();
@@ -167,6 +171,7 @@ class AppRepository {
       'barangay_text': null,
       'landmark': null,
       'archived': false,
+      for (final key in storeLocationFields) key: null,
     });
     _validate(_copy(data, stores: _replace(data.stores, row)));
     await _upsert('stores', row);
@@ -306,7 +311,12 @@ class AppRepository {
   Row? _storeSnapshot(Row? store) => store == null
       ? null
       : {
-          for (final key in ['name', 'barangay_text', 'landmark'])
+          for (final key in [
+            'name',
+            'barangay_text',
+            'landmark',
+            ...storeLocationFields,
+          ])
             key: store[key],
         };
 
@@ -450,10 +460,43 @@ class AppRepository {
     dynamic value,
   ) => db.transaction(() async {
     validateSetting(key, value);
+    final data = await _read();
+    _validate(_copy(data, settings: {...data.settings, key: value}));
     await db.customStatement(
       'INSERT INTO app_settings(key,value) VALUES (?,?) ON CONFLICT(key) DO UPDATE SET value=excluded.value',
       [key, jsonEncode(value)],
     );
+  });
+
+  Future<void> saveShoppingArea(Row area) => db.transaction(() async {
+    exactFields(area, [
+      'mode',
+      'label',
+      'latitude_e6',
+      'longitude_e6',
+      'accuracy_m',
+      'captured_at_utc',
+      'radius_m',
+    ], 'Shopping area');
+    final data = await _read();
+    final settings = <String, dynamic>{
+      ...data.settings,
+      'location_mode': area['mode'],
+      'area_label': area['label'],
+      'area_latitude_e6': area['latitude_e6'],
+      'area_longitude_e6': area['longitude_e6'],
+      'area_accuracy_m': area['accuracy_m'],
+      'area_captured_at_utc': area['captured_at_utc'],
+      'area_radius_m': area['radius_m'],
+    };
+    _validate(_copy(data, settings: settings));
+    for (final key in shoppingAreaSettings) {
+      await db.customStatement(
+        'INSERT INTO app_settings(key,value) VALUES (?,?) ON CONFLICT(key) DO UPDATE SET value=excluded.value',
+        [key, jsonEncode(settings[key])],
+      );
+    }
+    writeCheckpoint?.call('shopping_area_written');
   });
 
   Future<void> setMonthlyBudget(
@@ -461,12 +504,22 @@ class AppRepository {
     int? centavos,
   ) => db.transaction(() async {
     checkedMonth(month);
+    if (centavos != null) {
+      checkedInt(centavos, 'Monthly budget', max: maxBudget);
+    }
+    final data = await _read();
+    final budgets = {...data.monthlyBudgets};
+    if (centavos == null) {
+      budgets.remove(month);
+    } else {
+      budgets[month] = centavos;
+    }
+    _validate(_copy(data, monthlyBudgets: budgets));
     if (centavos == null) {
       await db.customStatement('DELETE FROM monthly_budgets WHERE month=?', [
         month,
       ]);
     } else {
-      checkedInt(centavos, 'Monthly budget', max: maxBudget);
       await db.customStatement(
         'INSERT INTO monthly_budgets(month,budget_centavos) VALUES (?,?) ON CONFLICT(month) DO UPDATE SET budget_centavos=excluded.budget_centavos',
         [month, centavos],

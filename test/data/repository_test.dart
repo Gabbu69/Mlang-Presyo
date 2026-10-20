@@ -69,7 +69,7 @@ void main() {
   tearDown(() async => repository.close());
 
   test(
-    'initial real database is empty, FK enabled and schema is version 1',
+    'initial real database is empty, FK enabled and schema is version 2',
     () async {
       final data = await repository.load();
       expect(data.products, isEmpty);
@@ -87,7 +87,7 @@ void main() {
             .data
             .values
             .single,
-        1,
+        2,
       );
       expect(
         (await database.exportedSchema())
@@ -98,9 +98,9 @@ void main() {
     },
   );
 
-  test('initial schema matches the inspected version 1 export', () async {
+  test('initial schema matches the inspected version 2 export', () async {
     final snapshot =
-        jsonDecode(await File('drift_schemas/schema_v1.json').readAsString())
+        jsonDecode(await File('drift_schemas/schema_v2.json').readAsString())
             as Map<String, dynamic>;
     expect(snapshot['schema_version'], database.schemaVersion);
     expect(await database.exportedSchema(), snapshot['entities']);
@@ -554,7 +554,7 @@ void main() {
       var disk = AppRepository(AppDatabase.file(file), clock: () => now);
       await fixtures(disk);
       await disk.savePurchase(purchase());
-      await disk.db.customStatement('PRAGMA user_version = 2');
+      await disk.db.customStatement('PRAGMA user_version = 3');
       await disk.close();
       disk = AppRepository(AppDatabase.file(file), clock: () => now);
       await expectLater(disk.load(), throwsA(anything));
@@ -577,7 +577,7 @@ void main() {
           raw.select('SELECT status FROM list_items').single['status'],
           'bought',
         );
-        expect(raw.select('PRAGMA user_version').single.values.single, 2);
+        expect(raw.select('PRAGMA user_version').single.values.single, 3);
         expect(raw.select('PRAGMA foreign_key_check'), isEmpty);
       } finally {
         raw.close();

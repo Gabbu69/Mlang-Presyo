@@ -1,0 +1,7 @@
+Analyzing Mlang Presyo...                                       
+
+   info - Statements in an if should be enclosed in a block. Try wrapping the statement in a block - lib\data\validation.dart:262:9 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block. Try wrapping the statement in a block - test\data\location_data_test.dart:140:13 - curly_braces_in_flow_control_structures
+warning - 'package:drift/remote.dart' is experimental and could be removed or changed at any time - test\migrations\location_migration_test.dart:4:1 - experimental_member_use
+
+3 issues found. (ran in 27.7s)

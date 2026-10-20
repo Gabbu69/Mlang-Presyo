@@ -15,7 +15,7 @@ flutter test test/migrations/initial_schema_test.dart --concurrency=1
 ```
 
 The script creates a temporary empty SQLite database, runs `drift_dev schema dump`
-into `drift_schemas/official/drift_schema_v1.json`, and runs `drift_dev schema generate`
+into `drift_schemas/official/drift_schema_v2.json`, and runs `drift_dev schema generate`
 on that official-only directory into `test/generated_migrations`. It creates the
 official output directory and removes only its own temporary directory. The
 older `drift_schemas/schema_v1.json` inspection snapshot and its existing tests are
@@ -26,11 +26,14 @@ The normal `scripts/build-debug.ps1` resolves dependencies and generates these
 helpers before formatting, analysis and tests; formatting includes the entire
 `test` directory, including generated helpers and migration verification.
 
-`SchemaVerifier(GeneratedHelper())` compares the real initial schema to the
-official snapshot, then verifies a populated version 1 database after reopening.
+`SchemaVerifier(GeneratedHelper())` compares real schema 2 creation to the
+official snapshot. Migration tests populate a database created from the retained
+official schema 1 fixture, then open it through the application's actual 1-to-2
+migration and verify its original records, snapshots, totals and foreign keys.
 A negative test adds an unexpected table and requires schema mismatch detection.
 This follows [Drift migration testing](https://drift.simonbinder.eu/migrations/tests/)
-without inventing an earlier released schema. There is no v1-to-v2 migration yet.
+without inventing an earlier released schema. Version 2 adds optional store
+location fields without deleting or recreating the existing notebook.
 
 When the schema genuinely changes, retain the v1 snapshot, increment the actual
 schema version, implement the migration, export the new official snapshot and

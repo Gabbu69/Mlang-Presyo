@@ -74,9 +74,33 @@ Quantity edits clear manual estimates or recalculate selected-price snapshots.
 `AppRepository.restore(AppData data,{void Function()? beforeCommit})` revalidates and
 atomically replaces real data; optional callback allows rollback fault tests.
 Backup/export and restore are UI-disabled in demo; repository restore rejects demo.
-Backup shape: format_version=1,exported_at_utc,currency=PHP,timezone=Asia/Manila,
+Backup shape: format_version=2,exported_at_utc,currency=PHP,timezone=Asia/Manila,
 products,stores,price_records,shopping_lists,list_items,purchases,app_settings,
 monthly_budgets (array of {month,budget_centavos}).
+
+Format 1 imports remain supported with null location defaults. File names and
+visible app branding are not part of backup validation. Existing inner frozen
+snapshots retain their format_version=1 contract independently of the outer
+backup version. Validate the full document and capacity before any replacement.
+
+## Shopping area and optional store tags
+
+`ShoppingArea` supports all/manual/nearby; All areas is the default. Named areas
+match after trimming/collapsing whitespace and case normalization. Nearby uses
+the saved center and 5000/10000/25000 metre radii (default 10000), inclusive of
+the boundary, and excludes unlocated stores. Distances are approximate geography;
+floating-point distance math never handles money.
+
+`AppRepository.saveShoppingArea(Row)` validates and saves the complete scope in
+one transaction. Nullable store fields are area_text, latitude_e6, longitude_e6,
+accuracy_m and location_captured_at_utc. Coordinates are integer microdegrees;
+GPS fields must form a complete valid tag. Existing purchases and selected-price
+snapshots remain frozen after store or area edits. Location export text cells
+receive the same formula-injection escaping as other user text.
+
+The unchanged `app.presyomlang/location` method channel captures one foreground
+fix only when requested. Manual labels are user entered. Preview/save is distinct
+from capture. Location failures never mutate the saved shopping area or store.
 
 ## Owner actions and defaults
 
